@@ -1,10 +1,16 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
 
-group = 'efreicraft'
+group = 'fr.efreicraft'
 version = 'dev'
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
     maven {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
@@ -12,10 +18,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'net.luckperms:api:5.4'
 }
 
-def targetJavaVersion = 8
+def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -34,9 +41,8 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
     def props = [version: version]
     inputs.properties props
-    expand props
     filteringCharset 'UTF-8'
-    filesMatching('bungee.yml') {
+    filesMatching('plugin.yml') {
         expand props
     }
 }

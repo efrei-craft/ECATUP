@@ -1,0 +1,25 @@
+name: ECATUP
+version: '${version}'
+main: fr.efreicraft.ecatup.Main
+prefix: ECATUP
+api-version: 1.19
+authors: [ Niilyx ]
+description: L'Essentials d'Efrei Craft
+website: https://efreicraft.fr/
+
+depend: #Charger ECATUP APRÈS LP.
+  - LuckPerms
+
+
+permissions:
+  ecatup.lobby:
+      description: Ramène au lobby principal
+
+
+commands:
+  lobby:
+    description: Teleport to the lobby
+    usage: /lobby
+    aliases: [hub, spawn]
+    permission: ecatup.lobby
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.

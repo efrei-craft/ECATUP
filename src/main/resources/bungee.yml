@@ -1,5 +1,0 @@
-name: ECATUP
-version: '${version}'
-main: fr.efreicraft.ecatup.Main
-description: Efrei Craft's Awesome Tools and Utilities Plugin, un Essentials mais pour EC.
-author: Niilyx
