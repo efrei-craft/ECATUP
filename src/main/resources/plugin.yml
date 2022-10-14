@@ -13,13 +13,21 @@ depend: #Charger ECATUP APRÈS LP.
 
 permissions:
   ecatup.lobby:
-      description: Ramène au lobby principal
+    description: Ramène au lobby principal
+  ecatup.skull:
+    description:
 
 
 commands:
   lobby:
-    description: Teleport to the lobby
+    description: Se TP au lobby
     usage: /lobby
     aliases: [hub, spawn]
     permission: ecatup.lobby
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  skull:
+    description: Se give le crane de quelqu'un
+    usage: /skull [target]
+    aliases: [head]
+    permission: ecatup.skull
     permission-message: Vous n'avez pas la permission d'utiliser cette commande.
