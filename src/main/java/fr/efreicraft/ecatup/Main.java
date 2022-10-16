@@ -27,9 +27,8 @@ public final class Main extends JavaPlugin {
         LP = LuckPermsProvider.get();
 
         // Load config
+        saveDefaultConfig();
         config = INSTANCE.getConfig();
-        config.addDefault("server_name", "lobby");
-        config.options().copyDefaults(true);
         INSTANCE.saveConfig();
 
         // Register BungeeCord channel
