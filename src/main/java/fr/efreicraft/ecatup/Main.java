@@ -3,6 +3,7 @@ package fr.efreicraft.ecatup;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
+import fr.efreicraft.ecatup.listeners.*;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -23,6 +24,7 @@ public final class Main extends JavaPlugin {
         INSTANCE = this;
         LP = LuckPermsProvider.get();
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
+        Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Commandes
