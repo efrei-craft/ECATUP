@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static fr.efreicraft.ecatup.utils.Msg.cl;
+import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
 public class Gmc implements CommandExecutor {
     @Override
@@ -19,19 +19,19 @@ public class Gmc implements CommandExecutor {
                 player = (Player) sender;
             }
             else {
-                sender.sendMessage(cl("&cVous devez être un joueur pour exécuter cette commande !"));
+                sender.sendMessage(colorize("&cVous devez être un joueur pour exécuter cette commande !"));
                 return true;
             }
         }
         else {
             player = Bukkit.getPlayer(args[0]);
             if (player == null) {
-                sender.sendMessage(cl("&cLe joueur &l&6" + args[0] + "&r&c n'est pas connecté !"));
+                sender.sendMessage(colorize("&cLe joueur &l&6" + args[0] + "&r&c n'est pas connecté !"));
                 return true;
             }
         }
         player.setGameMode(GameMode.CREATIVE);
-        player.sendMessage(cl("&aVous êtes maintenant en mode créatif !"));
+        player.sendMessage(colorize("&aVous êtes maintenant en mode créatif !"));
         return true;
     }
 }
