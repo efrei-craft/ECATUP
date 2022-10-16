@@ -3,6 +3,7 @@ package fr.efreicraft.ecatup.commands;
 import fr.efreicraft.ecatup.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.luckperms.api.LuckPerms;
@@ -15,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -35,6 +37,9 @@ public class WhoIs implements CommandExecutor {
     final TextColor KEY_COLOR = NamedTextColor.DARK_AQUA;
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
 
+    // Jsuis obligé
+    Group[] ranks;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // ========== PRECISION : ON PEUT S'AUTO-WHOIS (because I said so) ==========
@@ -43,7 +48,7 @@ public class WhoIs implements CommandExecutor {
         OfflinePlayer player;
         if (args.length == 0) {
             if (sender instanceof Player)
-                player = (Player) sender;
+                player = (Player) sender;  // whois sur soi-même
             else {
                 sender.sendMessage(colorize("&cVous devez être un joueur (ou préciser le nom d'un joueur) pour exécuter cette commande !"));
                 return true;
@@ -57,15 +62,13 @@ public class WhoIs implements CommandExecutor {
         }
 
         Component message;
-        Group[] ranks;
-        ranks(player).thenAcceptAsync();
-
-        // whois sur soi-même
+        getRanks(player).thenAcceptAsync(groups -> ranks = groups.toArray(new Group[0]));
 
         message = Component.join(JoinConfiguration.newlines(),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR)),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text("", VALUE_COLOR)),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text("", VALUE_COLOR))
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR)
+                                .clickEvent(ClickEvent.copyToClipboard(player.getUniqueId().toString()))),
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(ranks), VALUE_COLOR)
+                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(ranks))))
                         );
 
 
@@ -78,9 +81,8 @@ public class WhoIs implements CommandExecutor {
 
     }
 
-    private CompletableFuture<Collection<Group>> ranks(OfflinePlayer player) {
+    private CompletableFuture<Collection<Group>> getRanks(OfflinePlayer player) {
         UUID uuid = player.getUniqueId();
-
 
         return LP.getUserManager().loadUser(uuid).thenApplyAsync(
                 user -> user.getInheritedGroups(user.getQueryOptions())
