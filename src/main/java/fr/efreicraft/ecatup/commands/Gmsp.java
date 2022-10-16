@@ -13,7 +13,7 @@ public class Gmsp implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = null;
-        if (args.length == 1) {
+        if (args.length == 0) {
             if (sender instanceof Player) {
                 player = (Player) sender;
             }
@@ -23,9 +23,9 @@ public class Gmsp implements CommandExecutor {
             }
         }
         else {
-            player = Bukkit.getPlayer(args[1]);
+            player = Bukkit.getPlayer(args[0]);
             if (player == null) {
-                sender.sendMessage(ChatColor.RED + "Le joueur " + args[1] + " n'est pas connecté !");
+                sender.sendMessage(ChatColor.RED + "Le joueur " + args[0] + " n'est pas connecté !");
                 return false;
             }
         }
