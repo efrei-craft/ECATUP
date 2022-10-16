@@ -1,9 +1,6 @@
 package fr.efreicraft.ecatup.commands;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,17 +11,15 @@ import org.jetbrains.annotations.NotNull;
 public class Lobby implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (args.length > 1) return false;
+        if (args.length > 0) return false;
 
         if (sender instanceof Player player) {
-            //noinspection ALL
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("Connect");
-            out.writeUTF("lobby");
-            player.sendPluginMessage(Main.INSTANCE, "BungeeCord", out.toByteArray());
-            Bukkit.getLogger().info(player.getName() + " a été envoyé au lobby !");
+            Main.sendPlayerToServer(player, "lobby");
             return true;
         }
-        return false;
+        else {
+            sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
+            return false;
+        }
     }
 }
