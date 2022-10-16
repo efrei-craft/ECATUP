@@ -15,7 +15,7 @@ import java.util.Objects;
 public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
-    LuckPerms LP;
+    public static LuckPerms LP;
 
     @Override
     public void onEnable() {
@@ -23,6 +23,7 @@ public final class Main extends JavaPlugin {
         INSTANCE = this;
         LP = LuckPermsProvider.get();
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
+        Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Commandes
         // Register lobby command only if plugin "Eclobby" is not loaded
