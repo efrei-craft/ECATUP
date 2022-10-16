@@ -8,6 +8,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
+    public static FileConfiguration config;
     public static LuckPerms LP;
 
     @Override
@@ -23,7 +25,17 @@ public final class Main extends JavaPlugin {
         // Plugin startup logic
         INSTANCE = this;
         LP = LuckPermsProvider.get();
+
+        // Load config
+        config = INSTANCE.getConfig();
+        config.addDefault("server_name", "lobby");
+        config.options().copyDefaults(true);
+        INSTANCE.saveConfig();
+
+        // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
+
+        // Register events
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new Join(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
