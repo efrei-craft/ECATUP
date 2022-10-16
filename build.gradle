@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'fr.efreicraft'
-version = 'dev'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
@@ -20,6 +20,17 @@ repositories {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "fr.efreicraft.ecatup.Main"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 def targetJavaVersion = 17

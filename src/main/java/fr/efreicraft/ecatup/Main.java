@@ -12,12 +12,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
     public static FileConfiguration config;
+    public static Connection connection;
     public static LuckPerms LP;
 
     @Override
@@ -27,10 +31,18 @@ public final class Main extends JavaPlugin {
         LP = LuckPermsProvider.get();
 
         // Load config
+        saveDefaultConfig();
         config = INSTANCE.getConfig();
-        config.addDefault("server_name", "lobby");
-        config.options().copyDefaults(true);
         INSTANCE.saveConfig();
+
+        // Connect to MariaDB database
+
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mariadb://" + config.getString("database.host") + ":" + config.getInt("database.port") + "/" + config.getString("database.database") + "?user=" + config.getString("database.user") + "&password=" + config.getString("database.password"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
@@ -56,7 +68,15 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        // Unregister BungeeCord channel
         getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
+
+        // Close database connection
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void registerCommand(String command, CommandExecutor executor) {
