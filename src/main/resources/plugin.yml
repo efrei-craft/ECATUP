@@ -3,9 +3,9 @@ version: '${version}'
 main: fr.efreicraft.ecatup.Main
 prefix: ECATUP
 api-version: 1.19
-authors: [ Niilyx ]
-description: L'Essentials d'Efrei Craft
-website: https://efreicraft.fr/
+authors: [ Niilyx, DocSystem ]
+description: Les commandes et fonctions utiles d'Efrei Craft
+website: https://github.com/efrei-craft/ECATUP
 
 depend: #Charger ECATUP APRÈS LP.
   - LuckPerms
