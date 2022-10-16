@@ -10,11 +10,11 @@ website: https://efreicraft.fr/
 depend: #Charger ECATUP APRÈS LP.
   - LuckPerms
 
-
 permissions:
   ecatup.lobby:
-      description: Ramène au lobby principal
-
+    description: Ramène au lobby principal
+  ecatup.gamemode:
+    description: Permet de changer de gamemode
 
 commands:
   lobby:
@@ -22,4 +22,29 @@ commands:
     usage: /lobby
     aliases: [hub, spawn]
     permission: ecatup.lobby
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  gm:
+    description: Change your gamemode
+    usage: /gm <gamemode> [player]
+    permission: ecatup.gamemode
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  gmc:
+    description: Change your gamemode to creative
+    usage: /gmc [player]
+    permission: ecatup.gamemode
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  gms:
+    description: Change your gamemode to survival
+    usage: /gms [player]
+    permission: ecatup.gamemode
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  gma:
+    description: Change your gamemode to adventure
+    usage: /gma [player]
+    permission: ecatup.gamemode
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  gmsp:
+    description: Change your gamemode to spectator
+    usage: /gmsp [player]
+    permission: ecatup.gamemode
     permission-message: Vous n'avez pas la permission d'utiliser cette commande.

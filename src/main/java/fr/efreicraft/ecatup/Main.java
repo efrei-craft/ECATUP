@@ -18,9 +18,14 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         LP = LuckPermsProvider.get();
-
-        /* Commandes */
         registerCom(new Lobby(), "lobby");
+
+        // Commandes
+        registerCommand("gm", new Gm());
+        registerCommand("gms", new Gms());
+        registerCommand("gma", new Gma());
+        registerCommand("gmc", new Gmc());
+        registerCommand("gmsp", new Gmsp());
     }
 
     @Override
