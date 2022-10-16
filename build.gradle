@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'fr.efreicraft'
-version = 'dev'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
