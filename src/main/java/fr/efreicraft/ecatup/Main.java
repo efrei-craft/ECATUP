@@ -29,10 +29,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
-        // Commandes
-        // Register lobby command only if plugin "Eclobby" is not loaded
-        if (Bukkit.getPluginManager().getPlugin("Eclobby") == null) {
-            registerCommand("lobby", new Lobby());
+        // Register commands
+        if (Bukkit.getPluginManager().getPlugin("ECLobby") == null) {
+            registerCommand("lobby", new Lobby()); // Only register /lobby if ECLobby is not installed
         }
         registerCommand("gm", new Gm());
         registerCommand("gms", new Gms());
