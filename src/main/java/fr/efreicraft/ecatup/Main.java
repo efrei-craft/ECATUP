@@ -25,8 +25,8 @@ public final class Main extends JavaPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
 
         // Commandes
-        // Register lobby command only if it is not already registered
-        if (Objects.isNull(getCommand("lobby"))) {
+        // Register lobby command only if plugin "Eclobby" is not loaded
+        if (Bukkit.getPluginManager().getPlugin("Eclobby") == null) {
             registerCommand("lobby", new Lobby());
         }
         registerCommand("gm", new Gm());
