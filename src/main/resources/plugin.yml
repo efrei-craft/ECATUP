@@ -17,6 +17,8 @@ permissions:
     description: Permet de changer de gamemode
   ecatup.give.skull:
     description: Permet de donner une tête de joueur
+  ecatup.whois:
+    description: Permet d'utiliser la commande /whois
 
 commands:
   lobby:
@@ -24,34 +26,31 @@ commands:
     usage: /lobby
     aliases: [hub, spawn]
     permission: ecatup.lobby
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   gm:
     description: Change your gamemode
     usage: /gm <gamemode> [player]
     permission: ecatup.gamemode
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   gmc:
     description: Change your gamemode to creative
     usage: /gmc [player]
     permission: ecatup.gamemode
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   gms:
     description: Change your gamemode to survival
     usage: /gms [player]
     permission: ecatup.gamemode
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   gma:
     description: Change your gamemode to adventure
     usage: /gma [player]
     permission: ecatup.gamemode
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   gmsp:
     description: Change your gamemode to spectator
     usage: /gmsp [player]
     permission: ecatup.gamemode
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
   skull:
     description: Get a player skull
     usage: /skull [player]
     permission: ecatup.give.skull
-    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  whois:
+    description: Get infos about a player
+    usage: /whois [player]
+    permission: ecatup.whois

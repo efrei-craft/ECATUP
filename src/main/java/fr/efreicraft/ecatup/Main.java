@@ -51,6 +51,7 @@ public final class Main extends JavaPlugin {
         registerCommand("gmc", new Gmc());
         registerCommand("gmsp", new Gmsp());
         registerCommand("skull", new Skull());
+        registerCommand("whois", new WhoIs());
     }
 
     @Override
