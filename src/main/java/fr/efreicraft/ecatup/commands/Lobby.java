@@ -15,11 +15,10 @@ public class Lobby implements CommandExecutor {
 
         if (sender instanceof Player player) {
             Main.sendPlayerToServer(player, "lobby");
-            return true;
         }
         else {
             sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
-            return false;
         }
+        return true;
     }
 }

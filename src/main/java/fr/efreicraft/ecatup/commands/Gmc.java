@@ -1,13 +1,14 @@
 package fr.efreicraft.ecatup.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
 public class Gmc implements CommandExecutor {
     @Override
@@ -18,19 +19,19 @@ public class Gmc implements CommandExecutor {
                 player = (Player) sender;
             }
             else {
-                sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
-                return false;
+                sender.sendMessage(colorize("&cVous devez être un joueur pour exécuter cette commande !"));
+                return true;
             }
         }
         else {
             player = Bukkit.getPlayer(args[0]);
             if (player == null) {
-                sender.sendMessage(ChatColor.RED + "Le joueur " + args[0] + " n'est pas connecté !");
-                return false;
+                sender.sendMessage(colorize("&cLe joueur &l&6" + args[0] + "&r&c n'est pas connecté !"));
+                return true;
             }
         }
         player.setGameMode(GameMode.CREATIVE);
-        player.sendMessage(ChatColor.GREEN + "Vous êtes maintenant en mode créatif !");
+        player.sendMessage(colorize("&aVous êtes maintenant en mode créatif !"));
         return true;
     }
 }

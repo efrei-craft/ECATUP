@@ -46,3 +46,8 @@ processResources {
         expand props
     }
 }
+
+task move(type: Copy) {
+    from "build/libs/" + rootProject.name + "-" + version + ".jar"
+    into "SERVER_TEST/plugins/"
+}

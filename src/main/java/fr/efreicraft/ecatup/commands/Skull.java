@@ -21,16 +21,14 @@ public class Skull implements CommandExecutor {
                 skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(args[0]));
                 skull.setItemMeta(skullMeta);
                 player.getInventory().addItem(skull);
-                return true;
             }
             else {
                 sender.sendMessage(ChatColor.RED + "Usage: /skull <player>");
-                return false;
             }
         }
         else {
             sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
-            return false;
         }
+        return true;
     }
 }
