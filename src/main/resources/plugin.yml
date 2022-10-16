@@ -15,6 +15,8 @@ permissions:
     description: Ramène au lobby principal
   ecatup.gamemode:
     description: Permet de changer de gamemode
+  ecatup.give.skull:
+    description: Permet de donner une tête de joueur
 
 commands:
   lobby:
@@ -47,4 +49,9 @@ commands:
     description: Change your gamemode to spectator
     usage: /gmsp [player]
     permission: ecatup.gamemode
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
+  skull:
+    description: Get a player skull
+    usage: /skull [player]
+    permission: ecatup.give.skull
     permission-message: Vous n'avez pas la permission d'utiliser cette commande.

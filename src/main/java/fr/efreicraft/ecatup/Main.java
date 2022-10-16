@@ -26,14 +26,15 @@ public final class Main extends JavaPlugin {
         registerCommand("gma", new Gma());
         registerCommand("gmc", new Gmc());
         registerCommand("gmsp", new Gmsp());
+        registerCommand("skull", new Skull());
     }
 
     @Override
     public void onDisable() {
 
+    void registerCommand(String command, CommandExecutor executor) {
+        Objects.requireNonNull(Bukkit.getPluginCommand(command)).setExecutor(executor);
     }
 
-    void registerCom(CommandExecutor handler, String com) {
-        Objects.requireNonNull(Bukkit.getPluginCommand(com)).setExecutor(handler);
     }
 }
