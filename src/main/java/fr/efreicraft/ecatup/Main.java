@@ -25,6 +25,8 @@ public final class Main extends JavaPlugin {
         LP = LuckPermsProvider.get();
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new Join(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Commandes
