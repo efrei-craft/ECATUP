@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
@@ -37,8 +39,8 @@ public class WhoIs implements CommandExecutor {
     final TextColor KEY_COLOR = NamedTextColor.DARK_AQUA;
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
 
+
     // Jsuis obligé
-    List<String> LPcollection = new ArrayList<>();
     HoverEvent<Component> CLICK_TO_COPY = HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Cliquez pour copier !"));
 
     @Override
@@ -62,22 +64,20 @@ public class WhoIs implements CommandExecutor {
             }
         }
 
+
         Component message;
 
         /* Obtenir les rangs */
-        getRanks(player).thenAcceptAsync(groups -> {
-            for (Group grp : groups) {
-                if (grp != null)
-                    LPcollection.add(grp.getName());
-            }
-        });
-        
+        Collection<Group> LPcollection = getRanks(player).join();
+        List<String> ranks = LPcollection == null ? Collections.emptyList() : LPcollection.stream().map(Group::getName).collect(Collectors.toList());
+
+
         message = Component.join(JoinConfiguration.newlines(),
                         Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR, TextDecoration.BOLD)
                                 .clickEvent(ClickEvent.copyToClipboard(player.getUniqueId().toString())))
                                 .hoverEvent(CLICK_TO_COPY),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(LPcollection.toArray()), VALUE_COLOR, TextDecoration.BOLD)
-                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(LPcollection.toArray()))))
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(ranks.toArray()), VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(ranks.toArray()))))
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
