@@ -4,8 +4,10 @@ import fr.efreicraft.ecatup.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
@@ -16,9 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
@@ -38,7 +38,8 @@ public class WhoIs implements CommandExecutor {
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
 
     // Jsuis obligé
-    Group[] ranks;
+    List<String> LPcollection = new ArrayList<>();
+    HoverEvent<Component> CLICK_TO_COPY = HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Cliquez pour copier !"));
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -50,35 +51,41 @@ public class WhoIs implements CommandExecutor {
             if (sender instanceof Player)
                 player = (Player) sender;  // whois sur soi-même
             else {
-                sender.sendMessage(colorize("&cVous devez être un joueur (ou préciser le nom d'un joueur) pour exécuter cette commande !"));
+                sender.sendMessage(colorize("&cVous devez etre un joueur (ou preciser le nom d'un joueur) pour executer cette commande !"));
                 return true;
             }
         } else {
             player = Bukkit.getOfflinePlayerIfCached(args[0]);
             if (player == null) {
-                sender.sendMessage(colorize("&cLe joueur &l&6" + args[0] + "&r&c n'est pas connecté (ou ne s'est pas connecté récemment) !"));
+                sender.sendMessage(colorize("&cLe joueur &l&6" + args[0] + "&r&c n'est pas connecte (ou ne s'est pas connecte recemment) !"));
                 return true;
             }
         }
 
         Component message;
-        getRanks(player).thenAcceptAsync(groups -> ranks = groups.toArray(new Group[0]));
 
+        /* Obtenir les rangs */
+        getRanks(player).thenAcceptAsync(groups -> {
+            for (Group grp : groups) {
+                if (grp != null)
+                    LPcollection.add(grp.getName());
+            }
+        });
+        
         message = Component.join(JoinConfiguration.newlines(),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR)
-                                .clickEvent(ClickEvent.copyToClipboard(player.getUniqueId().toString()))),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(ranks), VALUE_COLOR)
-                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(ranks))))
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(player.getUniqueId().toString())))
+                                .hoverEvent(CLICK_TO_COPY),
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(LPcollection.toArray()), VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(LPcollection.toArray()))))
+                                .hoverEvent(CLICK_TO_COPY)
                         );
 
-
-        sender.sendMessage(colorize("&8======  &6" + sender.getName() + "&8  ======"));
+        sender.sendMessage(colorize("&8======  &6" + player.getName() + "&8  ======"));
         sender.sendMessage(message);
-        sender.sendMessage(colorize("&8========" + new String(new char[sender.getName().length()]).replace("\0", "=") + "========"));
+        sender.sendMessage(colorize("&8========" + new String(new char[player.getName().length()]).replace("\0", "=") + "========"));
 
         return true;
-
-
     }
 
     private CompletableFuture<Collection<Group>> getRanks(OfflinePlayer player) {
