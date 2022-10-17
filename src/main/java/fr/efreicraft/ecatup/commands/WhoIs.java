@@ -68,16 +68,16 @@ public class WhoIs implements CommandExecutor {
         Component message;
 
         /* Obtenir les rangs */
-        Collection<Group> LPcollection = getRanks(player).join();
-        List<String> ranks = LPcollection == null ? Collections.emptyList() : LPcollection.stream().map(Group::getName).collect(Collectors.toList());
-
+        Group[] LPcollection = getRanks(player).join().toArray(new Group[0]);
+//        List<String> ranks = LPcollection == null ? Collections.emptyList() : LPcollection.stream().map(Group::getName).collect(Collectors.toList());
+        String highestRank = LP.getUserManager().loadUser(player.getUniqueId()).join().getCachedData().getMetaData().getPrefix();
 
         message = Component.join(JoinConfiguration.newlines(),
                         Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR, TextDecoration.BOLD)
                                 .clickEvent(ClickEvent.copyToClipboard(player.getUniqueId().toString())))
                                 .hoverEvent(CLICK_TO_COPY),
-                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rangs: ", KEY_COLOR), Component.text(Arrays.toString(ranks.toArray()), VALUE_COLOR, TextDecoration.BOLD)
-                                .clickEvent(ClickEvent.copyToClipboard(Arrays.toString(ranks.toArray()))))
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Rang: ", KEY_COLOR), Component.text(highestRank == null ? "rien" : colorize(highestRank), VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(highestRank == null ? "rien" : colorize(highestRank))))
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
