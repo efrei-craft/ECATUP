@@ -58,6 +58,18 @@ public class Join implements Listener {
                         return;
                     }
                 }
+                else {
+                    Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
+                    event.getPlayer().kick(Component.text("§cVeuillez lier votre compte Discord pour accéder au serveur !"));
+                    event.joinMessage(null);
+                    return;
+                }
+            }
+            else {
+                Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
+                event.getPlayer().kick(Component.text("§cVeuillez lier votre compte Discord pour accéder au serveur !"));
+                event.joinMessage(null);
+                return;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
