@@ -3,7 +3,9 @@ plugins {
 }
 
 group = 'fr.efreicraft'
-version = '1.0.2-dev'
+version = '1.0.3-dev'
+
+compileJava.options.encoding "UTF-8"
 
 repositories {
     mavenCentral()

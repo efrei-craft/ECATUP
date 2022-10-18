@@ -22,6 +22,8 @@ permissions:
     description: Permet de donner une tête de joueur
   ecatup.whois:
     description: Permet d'utiliser la commande /whois
+  ecatup.chat.color:
+    description: Permet l'utilisation de '&' pour colorer son texte
 
 commands:
   lobby:
