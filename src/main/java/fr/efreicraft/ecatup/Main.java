@@ -45,7 +45,7 @@ public final class Main extends JavaPlugin {
         }
 
         // Register BungeeCord channel
-        getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "ecatup:sendServer");
+        getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "ecatup:sendserver");
 
         // Register events
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
@@ -88,6 +88,6 @@ public final class Main extends JavaPlugin {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
-        player.sendPluginMessage(INSTANCE, "ecatup:sendServer", out.toByteArray());
+        player.sendPluginMessage(INSTANCE, "ecatup:sendserver", out.toByteArray());
     }
 }
