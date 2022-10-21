@@ -26,7 +26,6 @@ public class Chat implements Listener {
         event.setCancelled(true);
 
         boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
-        boolean global = ((TextComponent) event.message()).content().toCharArray()[0] == '@';
 
         Component msg = event.getPlayer().displayName()
                 .append(Component.text(ChatColor.GRAY + ": "))
