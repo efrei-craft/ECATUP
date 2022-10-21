@@ -56,6 +56,6 @@ commands:
     usage: /skull [player]
     permission: ecatup.give.skull
   whois:
-    description: Get infos about a player
+    description: Get info about a player
     usage: /whois [player]
     permission: ecatup.whois
