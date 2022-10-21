@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 
 import java.util.Objects;
 
+import static fr.efreicraft.ecatup.utils.Msg.colorize;
+
 public class LuckPermsListener implements Listener {
 
     public LuckPermsListener(Main plugin, LuckPerms LP) {
@@ -21,7 +23,7 @@ public class LuckPermsListener implements Listener {
     private void onUserDataRecalculate(UserDataRecalculateEvent event) {
         Player player = Bukkit.getPlayer(Objects.requireNonNull(event.getUser().getUsername()));
         if (player != null) {
-            player.displayName(Component.text(event.getUser().getCachedData().getMetaData().getPrefix().replaceAll("&", "§") + player.getName()));
+            player.displayName(Component.text(colorize(event.getUser().getCachedData().getMetaData().getPrefix()) + player.getName()));
             player.playerListName(player.displayName());
         }
     }

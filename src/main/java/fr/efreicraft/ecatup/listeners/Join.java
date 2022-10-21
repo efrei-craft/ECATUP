@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static fr.efreicraft.ecatup.utils.Msg.colorize;
+
 public class Join implements Listener {
     LuckPerms LP = Main.LP;
     @EventHandler
@@ -39,15 +41,19 @@ public class Join implements Listener {
                     // Set player rank
                     switch (rank) {
                         case "Membre" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.member").build());
+
                         case "Beta Tester" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.beta").build());
+
                         case "Responsable Event", "Responsable Dev", "Responsable Infra", "Responsable Comm", "Responsable Build", "Responsable Design" -> {
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.be").build());
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("prefix.10.&c&l[" + rank + "] &c").build());
                         }
+
                         case "Président", "Vice-Président", "Trésorier", "Secrétaire" -> {
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.br").build());
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("prefix.10.&4&l[" + rank + "] &4").build());
                         }
+                        
                         default -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.visitor").build());
                     }
                     LP.getUserManager().saveUser(LP.getUserManager().getUser(event.getPlayer().getUniqueId()));
@@ -60,14 +66,14 @@ public class Join implements Listener {
                 }
                 else {
                     Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
-                    event.getPlayer().kick(Component.text("§cVeuillez lier votre compte Discord pour accéder au serveur !"));
+                    event.getPlayer().kick(Component.text(colorize("&cVeuillez lier votre compte Discord pour accéder au serveur !")));
                     event.joinMessage(null);
                     return;
                 }
             }
             else {
                 Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
-                event.getPlayer().kick(Component.text("§cVeuillez lier votre compte Discord pour accéder au serveur !"));
+                event.getPlayer().kick(Component.text(colorize("&cVeuillez lier votre compte Discord pour accéder au serveur !")));
                 event.joinMessage(null);
                 return;
             }
@@ -76,7 +82,7 @@ public class Join implements Listener {
         }
         String prefix = LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
         event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
-        event.joinMessage(event.getPlayer().displayName().append(Component.text("§7 a rejoint le serveur !")));
+        event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
     }
 }
