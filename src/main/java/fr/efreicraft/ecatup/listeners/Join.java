@@ -66,7 +66,7 @@ public class Join implements Listener {
                 }
                 else {
                     Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
-                    event.getPlayer().kick(Component.text(colorize("Veuillez lier votre compte Discord pour accéder au serveur !")));
+                    event.getPlayer().kick(Component.text(colorize("&cVeuillez lier votre compte Discord pour accéder au serveur !")));
                     event.joinMessage(null);
                     return;
                 }
