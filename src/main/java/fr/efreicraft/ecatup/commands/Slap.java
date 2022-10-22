@@ -20,7 +20,7 @@ public class Slap implements CommandExecutor {
             return true;
         }
 
-        boolean sendAway = args[1].equals("-a");
+        boolean sendAway = args.length == 2 && args[1].equals("-a");
         Player player = Bukkit.getPlayer(args[0]);
 
         if (player == null) {
