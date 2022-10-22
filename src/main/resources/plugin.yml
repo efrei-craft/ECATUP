@@ -26,6 +26,8 @@ permissions:
     description: Permet l'utilisation de '&' pour colorer son texte
   ecatup.slap:
     description: Permet d'utiliser /slap
+  ecatup.channel:
+    description: Permet de changer de channel, tout court
 
 commands:
   lobby:
@@ -33,6 +35,12 @@ commands:
     usage: /lobby
     aliases: [hub, spawn]
     permission: ecatup.lobby
+  chat:
+    description: Change chat channel
+    aliases:
+      - channel
+      - c
+    permission: ecatup.channel
   gm:
     description: Change your gamemode
     usage: /gm <gamemode> [player]

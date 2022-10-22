@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -61,6 +62,12 @@ public final class Main extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("ECLobby") == null) {
             registerCommand("lobby", new Lobby()); // Only register /lobby if ECLobby is not installed
         }
+
+        registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
+        for (PreferenceCache.ChatChannel channel : PreferenceCache.ChatChannel.values()) {
+            Bukkit.getPluginManager().addPermission(new Permission("ecatup.channel." + channel.toString().toLowerCase()));
+        }
+
         registerCommand("gm", new Gm());
         registerCommand("gms", new Gms());
         registerCommand("gma", new Gma());

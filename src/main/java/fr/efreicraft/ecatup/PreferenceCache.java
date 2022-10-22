@@ -3,10 +3,7 @@ package fr.efreicraft.ecatup;
 import com.google.common.collect.Lists;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -21,7 +18,7 @@ import java.util.UUID;
 @SuppressWarnings("ALL") // ça ça s'appelle un fuck off.
 public class PreferenceCache {
 
-    private static Map<UUID, List<?>> cache;
+    private static Map<UUID, List<?>> cache = new HashMap<>();
     public static final List DEFAULTS = Lists.newArrayList(ChatChannel.SERVER);
     private static final int NUMBER_OF_PREFS = DEFAULTS.size();
 
@@ -63,7 +60,8 @@ public class PreferenceCache {
     }
 
     public static List<?> getPrefs(UUID player) {
-        return cache.getOrDefault(player, DEFAULTS);
+        if (cache.get(player) == null || cache.get(player).size() < NUMBER_OF_PREFS) cache.put(player, DEFAULTS);
+        return cache.get(player);
     }
 
     public static void setPref(Player player, List<?> prefs) {
@@ -82,7 +80,7 @@ public class PreferenceCache {
         SERVER(1),
         TEAM(2);
 
-        final int ID;
+        public final int ID;
         ChatChannel(int i) {
             ID = i;
         }
