@@ -1,5 +1,6 @@
 package fr.efreicraft.ecatup.listeners;
 
+import fr.efreicraft.ecatup.PreferenceCache;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -10,5 +11,7 @@ public class Quit implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
+
+        PreferenceCache.unCache(event.getPlayer());
     }
 }
