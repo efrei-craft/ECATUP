@@ -26,7 +26,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+
         INSTANCE = this;
         LP = LuckPermsProvider.get();
 
@@ -46,6 +46,7 @@ public final class Main extends JavaPlugin {
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
+        getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "ecatup:globalchat");
 
         // Register events
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
@@ -63,12 +64,14 @@ public final class Main extends JavaPlugin {
         registerCommand("gmc", new Gmc());
         registerCommand("gmsp", new Gmsp());
         registerCommand("skull", new Skull());
+        registerCommand("slap", new Slap());
         registerCommand("whois", new WhoIs());
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+
         // Unregister BungeeCord channel
         getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
 

@@ -26,6 +26,7 @@ public class Chat implements Listener {
         event.setCancelled(true);
 
         boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
+
         Component msg = event.getPlayer().displayName()
                 .append(Component.text(ChatColor.GRAY + ": "))
                 .append(coloriseText ? Component.text(colorize((TextComponent) event.message())) : event.message());
