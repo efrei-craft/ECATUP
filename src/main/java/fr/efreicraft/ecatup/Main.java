@@ -51,7 +51,6 @@ public final class Main extends JavaPlugin {
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            getLogger().severe("IP:"+config.getString("database.host"));
             connection = DriverManager.getConnection("jdbc:mariadb://"
                     + config.getString("database.host")
                     + ":" + config.getInt("database.port") + "/" + config.getString("database.database")
