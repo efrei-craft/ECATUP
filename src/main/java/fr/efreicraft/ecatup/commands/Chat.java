@@ -104,7 +104,7 @@ public class Chat implements CommandExecutor, TabExecutor {
 
         List<String> result = new ArrayList<>();
         Arrays.stream(PreferenceCache.ChatChannel.values())
-                .filter(channel -> channel.toString().startsWith(args[0]))
+                .filter(channel -> channel.toString().startsWith(args[0].toUpperCase()))
                 .forEach(channel -> result.add(channel.toString()));
 
         return result;
