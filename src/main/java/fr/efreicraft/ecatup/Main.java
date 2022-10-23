@@ -7,6 +7,7 @@ import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -19,8 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class Main extends JavaPlugin {
 
@@ -115,5 +116,18 @@ public final class Main extends JavaPlugin {
         out.writeUTF("Connect");
         out.writeUTF(server);
         player.sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
+    }
+
+    public static void sendGlobalChat(String channel, Component... components) {
+        ByteArrayDataOutput out = ByteStreams.newDataOutput();
+
+        List<Map.Entry<UUID, List<?>>> entriesWithGlobalChannel = PreferenceCache.getCache().entrySet().stream().filter(entry -> entry.getValue().get(0) == PreferenceCache.ChatChannel.GLOBAL).toList();
+        List<UUID> players = new ArrayList<>();
+
+        for (Map.Entry<UUID, List<?>> uuidListEntry : entriesWithGlobalChannel) {
+            players.add(uuidListEntry.getKey());
+        }
+        
+
     }
 }

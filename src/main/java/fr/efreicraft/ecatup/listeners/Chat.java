@@ -47,6 +47,9 @@ public class Chat implements Listener {
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
         switch (channelActuel) {
+            case GLOBAL -> {
+                Main.sendGlobalChat(msgCopie.toString(), channelPrefix, msg);
+            }
             case SERVER -> Bukkit.broadcast(Component.join(JoinConfiguration.noSeparators(), channelPrefix, msg
                     .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT))));
             case TEAM -> {
