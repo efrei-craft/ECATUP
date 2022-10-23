@@ -37,16 +37,16 @@ public class Chat implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        boolean isOP = self.hasPermission("group.beta");
+        boolean canUseGlobal = self.hasPermission("ecatup.channel.global");
 
         if (args[0].equalsIgnoreCase("help") || args.length > 1) {
-            sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (isOP ? "g|global OR " : "") + "s|server|normal OR t|team]"));
+            sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team]"));
             return true;
         }
 
         switch (args[0].toLowerCase()) {
             case "g","global" -> {
-                if (isOP) {
+                if (canUseGlobal) {
                     sendChannelPrefToDB(self, PreferenceCache.ChatChannel.GLOBAL);
                     PreferenceCache.setPref(self, 0, PreferenceCache.ChatChannel.GLOBAL);
                     sender.sendMessage(colorize("&aVous basculez sur le canal &e[GLOBAL]"));
@@ -63,7 +63,7 @@ public class Chat implements CommandExecutor, TabExecutor {
 
                 sender.sendMessage(colorize("&aVous basculez sur le canal &e[TEAM]"));
             }
-            default -> sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (isOP ? "g|global OR " : "") + "s|server|normal OR t|team]"));
+            default -> sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team]"));
         }
 
         return true;

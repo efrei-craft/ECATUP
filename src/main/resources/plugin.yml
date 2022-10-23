@@ -28,6 +28,8 @@ permissions:
     description: Permet d'utiliser /slap
   ecatup.channel:
     description: Permet de changer de channel, tout court
+    children:
+      - ecatup.channel.global
 
 commands:
   lobby:
