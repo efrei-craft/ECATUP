@@ -78,7 +78,7 @@ public class WhoIs implements CommandExecutor {
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
-        sender.sendMessage(colorize(player.isOnline() ? "&8======  &a" : "&8======  &4" + player.getName() + "&8  ======"));
+        sender.sendMessage(colorize((player.isOnline() ? "&8======  &a" : "&8======  &4") + player.getName() + "&8  ======"));
         sender.sendMessage(message);
         sender.sendMessage(colorize("&8========" + new String(new char[player.getName().length()]).replace("\0", "=") + "========"));
 
