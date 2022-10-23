@@ -31,9 +31,14 @@ public class Chat implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        PreferenceCache.ChatChannel channel = (PreferenceCache.ChatChannel) PreferenceCache.getPrefs(self).get(0);
+        PreferenceCache.ChatChannel channelActuel = (PreferenceCache.ChatChannel) PreferenceCache.getPrefs(self).get(0);
         if (args.length == 0) {
-            sender.sendMessage(colorize("&bVotre canal actuel est: &r&l" + channel));
+            sender.sendMessage(colorize("&bVotre canal actuel est: &r&l" + channelActuel));
+            return true;
+        }
+
+        if (channelActuel.toString().equals(args[0].toUpperCase())) {
+            sender.sendMessage(colorize("&cVous êtes déjà sur le canal &r&l" + channelActuel));
             return true;
         }
 
