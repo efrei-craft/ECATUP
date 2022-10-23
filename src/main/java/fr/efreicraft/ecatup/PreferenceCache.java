@@ -64,6 +64,10 @@ public class PreferenceCache {
         return cache.get(player);
     }
 
+    public static ChatChannel getChannel(UUID player) {
+        return (ChatChannel) getPrefs(player).get(0);
+    }
+
     public static void setPref(Player player, List<?> prefs) {
         cache.put(player.getUniqueId(), prefs);
     }
