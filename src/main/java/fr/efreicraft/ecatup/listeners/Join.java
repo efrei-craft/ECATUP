@@ -108,12 +108,9 @@ public class Join implements Listener {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        String prefix = LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
+        String prefix = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
         event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
         event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
-
-
     }
 }

@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Properties;
 
 public final class Main extends JavaPlugin {
 
@@ -35,15 +36,28 @@ public final class Main extends JavaPlugin {
         LP = LuckPermsProvider.get();
 
         // Load config
-        saveDefaultConfig();
         config = INSTANCE.getConfig();
-        INSTANCE.saveConfig();
+        config.addDefault("server_name", "lobby");
+        config.addDefault("database.host", "127.0.0.1");
+        config.addDefault("database.port", 3306);
+        config.addDefault("database.database", "db");
+        config.addDefault("database.user", "user");
+        config.addDefault("database.password", "pwd");
+
+        config.options().copyDefaults(true);
+        saveConfig();
 
         // Connect to MariaDB database
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mariadb://" + config.getString("database.host") + ":" + config.getInt("database.port") + "/" + config.getString("database.database") + "?user=" + config.getString("database.user") + "&password=" + config.getString("database.password"));
+            getLogger().severe("IP:"+config.getString("database.host"));
+            connection = DriverManager.getConnection("jdbc:mariadb://"
+                    + config.getString("database.host")
+                    + ":" + config.getInt("database.port") + "/" + config.getString("database.database")
+                    + "?user=" + config.getString("database.user")
+                    + "&password=" + config.getString("database.password")
+                    + "&autoReconnect=true");
         } catch (Exception e) {
             e.printStackTrace();
         }
