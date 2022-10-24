@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
@@ -69,7 +70,7 @@ public class Slap implements CommandExecutor, TabExecutor {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().startsWith(args[0])).collect(Collectors.toList());
+            List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
             List<String> results = new ArrayList<>();
             players.forEach(player -> results.add(player.getName()));
             players.clear(); // get rid of some space & memory
