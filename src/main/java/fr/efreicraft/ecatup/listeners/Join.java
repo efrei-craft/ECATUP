@@ -31,7 +31,6 @@ public class Join implements Listener {
 
             // Execute query
             result = mcLinkStatement.executeQuery();
-
             if (result.next()) {
                 String discordId = result.getString("discordid");
                 PreparedStatement memberDataStatement = Main.connection.prepareStatement("SELECT * FROM `members` WHERE `discordid` = ?");
@@ -87,7 +86,7 @@ public class Join implements Listener {
 
             mcLinkStatement.close();
             result.close();
-
+            
             /* ===== PREFERENCES STUFF ===== */
             PreparedStatement userPrefsStatement = Main.connection.prepareStatement("SELECT * FROM `usersPrefs` WHERE `mcUUID` = ?");
             userPrefsStatement.setString(1, event.getPlayer().getUniqueId().toString());
@@ -112,5 +111,7 @@ public class Join implements Listener {
         event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
         event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
+
+
     }
 }

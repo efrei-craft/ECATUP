@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
@@ -25,6 +24,7 @@ public class Slap implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0 || args.length > 2 || args[0].equals("-a")) {
+
             sender.sendMessage(Component.text(colorize("&c&lUsage: &r&c/slap <player> [-a]\n-a = Pousse le joueur dans la direction opposée par rapport à votre position.")));
             return true;
         }

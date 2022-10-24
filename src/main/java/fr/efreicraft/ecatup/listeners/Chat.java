@@ -31,6 +31,7 @@ public class Chat implements Listener {
         event.setCancelled(true);
 
         boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
+
         PreferenceCache.ChatChannel channelActuel = PreferenceCache.getChannel(event.getPlayer().getUniqueId());
 
         Component channelPrefix = Component.text(channelActuel == PreferenceCache.ChatChannel.SERVER ? "" : ("["+channelActuel+"] ")).color(NamedTextColor.YELLOW);
