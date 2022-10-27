@@ -10,6 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Skull implements CommandExecutor {
     @Override
@@ -30,5 +36,17 @@ public class Skull implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
         }
         return true;
+    }
+
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 1) {
+            List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            List<String> results = new ArrayList<>();
+            players.forEach(player -> results.add(player.getName()));
+            players.clear(); // get rid of some space & memory
+            return results;
+        }
+
+        return null;
     }
 }
