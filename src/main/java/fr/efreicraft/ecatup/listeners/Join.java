@@ -1,6 +1,7 @@
 package fr.efreicraft.ecatup.listeners;
 
 import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.node.Node;
@@ -8,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.awt.*;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +20,7 @@ import static fr.efreicraft.ecatup.utils.Msg.colorize;
 public class Join implements Listener {
     LuckPerms LP = Main.LP;
     @EventHandler
-    public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) {
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) throws IOException {
         // Get player rank from Association Database
         ResultSet result = null;
         try {
@@ -91,6 +94,17 @@ public class Join implements Listener {
         event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
 
+
+        // Send log to Discord
+        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
+        String playerName = event.getPlayer().getName();
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                .setTitle("Connexion")
+                .setDescription("**" + playerName + "** s'est connecté au serveur !")
+                .setColor(Color.decode("#00ff00"))
+                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+        );
+        webhook.execute();
 
     }
 }
