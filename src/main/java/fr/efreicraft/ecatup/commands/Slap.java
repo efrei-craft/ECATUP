@@ -71,7 +71,7 @@ public class Slap implements CommandExecutor, TabExecutor {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            return Main.getPlayersForTabList(args, 1);
+            return Main.getPlayersForTabList(args, 0);
         } else if (args.length == 2) {
             return Collections.singletonList("-a");
         }
