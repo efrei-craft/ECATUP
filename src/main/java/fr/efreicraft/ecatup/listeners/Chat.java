@@ -3,8 +3,8 @@ package fr.efreicraft.ecatup.listeners;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.Main;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import fr.efreicraft.ecatup.PreferenceCache;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
@@ -87,18 +86,14 @@ public class Chat implements Listener, PluginMessageListener {
         // Les messages Minecraft font au max 255 caractères, c'est pas très grave de les parcourir plusieurs fois.
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
-        Bukkit.broadcast(msg
-                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Copier")))
-                .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT)));
-
         // Send log to Discord
         DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
-        String playerName = event.getPlayer().getName();
+        String name = event.getPlayer().getName();
         String message = ((TextComponent)event.message()).content();
         webhook.setContent("");
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
                 .setTitle("Message")
-                .setDescription("**" + playerName + "** : " + message)
+                .setDescription("["+channelActuel+"] " + "**" + name + "** : " + message)
                 .setColor(Color.decode("#3498db"))
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
