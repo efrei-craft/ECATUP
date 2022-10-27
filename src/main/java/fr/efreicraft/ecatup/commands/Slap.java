@@ -1,5 +1,6 @@
 package fr.efreicraft.ecatup.commands;
 
+import fr.efreicraft.ecatup.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -70,15 +71,11 @@ public class Slap implements CommandExecutor, TabExecutor {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-            List<String> results = new ArrayList<>();
-            players.forEach(player -> results.add(player.getName()));
-            players.clear(); // get rid of some space & memory
-            return results;
+            return Main.getPlayersForTabList(args, 1);
         } else if (args.length == 2) {
             return Collections.singletonList("-a");
         }
 
-        return Collections.emptyList();
+        return null;
     }
 }

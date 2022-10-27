@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -118,16 +119,17 @@ public final class Main extends JavaPlugin {
         player.sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
     }
 
-    public static void sendGlobalChat(String channel, Component... components) {
+    public static void sendGlobalChat() {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-        List<Map.Entry<UUID, List<?>>> entriesWithGlobalChannel = PreferenceCache.getCache().entrySet().stream().filter(entry -> entry.getValue().get(0) == PreferenceCache.ChatChannel.GLOBAL).toList();
-        List<UUID> players = new ArrayList<>();
+        Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
+    }
 
-        for (Map.Entry<UUID, List<?>> uuidListEntry : entriesWithGlobalChannel) {
-            players.add(uuidListEntry.getKey());
-        }
-        
-
+    public static @Nullable List<String> getPlayersForTabList(String[] args, int argNb) {
+        List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argNb - 1].toLowerCase())).collect(Collectors.toList());
+        List<String> results = new ArrayList<>();
+        players.forEach(player -> results.add(player.getName()));
+        players.clear(); // get rid of some space & memory
+        return results.equals(new ArrayList<String>()) ? null : results;
     }
 }
