@@ -2,6 +2,7 @@ package fr.efreicraft.ecatup.listeners;
 
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
+import fr.efreicraft.ecatup.PreferenceCache;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -26,5 +27,6 @@ public class Quit implements Listener {
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
         webhook.execute();
+        PreferenceCache.unCache(event.getPlayer());
     }
 }

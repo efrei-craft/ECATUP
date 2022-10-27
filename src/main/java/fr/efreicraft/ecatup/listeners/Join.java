@@ -2,6 +2,7 @@ package fr.efreicraft.ecatup.listeners;
 
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
+import fr.efreicraft.ecatup.PreferenceCache;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.node.Node;
@@ -25,9 +26,12 @@ public class Join implements Listener {
         ResultSet result = null;
         try {
             String rank = "Visiteur";
+
+            /* ===== ROLES STUFF ===== */
             PreparedStatement mcLinkStatement = Main.connection.prepareStatement("SELECT * FROM `discordmclink` WHERE `mcaccount` = ?");
             mcLinkStatement.setString(1, event.getPlayer().getName());
             Bukkit.getLogger().info("Getting discord ID for " + event.getPlayer().getName());
+
             // Execute query
             result = mcLinkStatement.executeQuery();
             if (result.next()) {
@@ -85,11 +89,28 @@ public class Join implements Listener {
 
             mcLinkStatement.close();
             result.close();
+            
+            /* ===== PREFERENCES STUFF ===== */
+            PreparedStatement userPrefsStatement = Main.connection.prepareStatement("SELECT * FROM `usersPrefs` WHERE `mcUUID` = ?");
+            userPrefsStatement.setString(1, event.getPlayer().getUniqueId().toString());
+            Bukkit.getLogger().info("Getting " + event.getPlayer().getName() + "'s user preferences");
+
+            ResultSet resultPrefs = userPrefsStatement.executeQuery();
+            if (resultPrefs.next()) {
+                int channel = resultPrefs.getInt("channel");
+                // récup 1 par 1 les préférences de l'utilisateur
+
+                PreferenceCache.cache(event.getPlayer(), channel);
+            } else {
+                Bukkit.getLogger().info("Player " + event.getPlayer().getName() + " has no settings. Maybe they're a newbie?");
+            }
+
+            resultPrefs.close();
+            userPrefsStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        String prefix = LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
+        String prefix = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
         event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
         event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
         event.getPlayer().playerListName(event.getPlayer().displayName());
