@@ -42,14 +42,17 @@ public class Chat implements Listener {
 
         final String WHAT_TIME_IS_IT = " @ {" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")) + "}";
 
+        // LORE: msgCopie c'est ce que tu obtiens avec le clic gauche. msgGlobal c'est msgCopie mais AVEC les couleurs
+        // de sorte que je puisse le transmettre facilement sur d'autres serveurs.
         StringBuilder msgCopie = new StringBuilder(new String("["+channelActuel.toString()+"] ")).append(((TextComponent) msg).content());
+        StringBuilder msgGlobal = new StringBuilder(new String("["+channelActuel.toString()+"] ")).append(((TextComponent) msg).content());
 
         // Les messages Minecraft font au max 255 caractères, c'est pas très grave de les parcourir plusieurs fois.
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
         switch (channelActuel) {
             case GLOBAL -> {
-                Main.sendGlobalChat(msgCopie.toString(), channelPrefix, msg);
+                Main.sendGlobalChat(msgGlobal.toString(), msgCopie.toString(), event.getPlayer());
             }
             case SERVER -> Bukkit.broadcast(Component.join(JoinConfiguration.noSeparators(), channelPrefix, msg
                     .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT))));
