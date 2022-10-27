@@ -8,6 +8,7 @@ import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -18,6 +19,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -119,17 +123,26 @@ public final class Main extends JavaPlugin {
         player.sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
     }
 
-    public static void sendGlobalChat() {
+    public static void sendGlobalChat(String msg, String copie, @Nullable Player player) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
-        Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
-    }
+        out.writeUTF("Forward");
+        out.writeUTF("ONLINE");
+        out.writeUTF("ecatup:globalchat");
 
-    public static @Nullable List<String> getPlayersForTabList(String[] args, int argNb) {
-        List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argNb - 1].toLowerCase())).collect(Collectors.toList());
-        List<String> results = new ArrayList<>();
-        players.forEach(player -> results.add(player.getName()));
-        players.clear(); // get rid of some space & memory
-        return results.equals(new ArrayList<String>()) ? null : results;
+        ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
+        DataOutputStream msgout = new DataOutputStream(msgbytes);
+
+        try {
+            msgout.writeUTF(msg);
+        } catch (IOException e) {
+            INSTANCE.getLogger().severe("Couldn't send " +
+                    (player == null ? "a player's" : (player.getName() + "'s")) +
+                    " global message: " + msg);
+            if (player != null) {
+                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveur.").color(NamedTextColor.DARK_RED);
+                player.sendMessage(failed);
+            }
+        }
     }
 }
