@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class Main extends JavaPlugin {
@@ -34,6 +37,7 @@ public final class Main extends JavaPlugin {
     public static FileConfiguration config;
     public static Connection connection;
     public static LuckPerms LP;
+
 
     @Override
     public void onEnable() {
@@ -69,7 +73,7 @@ public final class Main extends JavaPlugin {
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
-        getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "ecatup:globalchat");
+        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new Chat());
 
         // Register events
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
@@ -103,6 +107,7 @@ public final class Main extends JavaPlugin {
 
         // Unregister BungeeCord channel
         getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
+        getServer().getMessenger().unregisterIncomingPluginChannel(INSTANCE);
 
         // Close database connection
         try {
@@ -116,6 +121,14 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(Bukkit.getPluginCommand(command)).setExecutor(executor);
     }
 
+    public static List<String> getPlayersForTabList(String[] args, int argPos) {
+        List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argPos].toLowerCase())).collect(Collectors.toList());
+        List<String> results = new ArrayList<>();
+        players.forEach(player -> results.add(player.getName()));
+        players.clear(); // get rid of some space & memory
+        return results.isEmpty() ? null : results;
+    }
+
     public static void sendPlayerToServer(Player player, String server) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
@@ -123,7 +136,7 @@ public final class Main extends JavaPlugin {
         player.sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
     }
 
-    public static void sendGlobalChat(String msg, String copie, @Nullable Player player) {
+    public static void sendGlobalChat(String msg, @Nullable Player player) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("Forward");
@@ -136,6 +149,8 @@ public final class Main extends JavaPlugin {
         try {
             msgout.writeUTF(msg);
         } catch (IOException e) {
+            e.printStackTrace();
+
             INSTANCE.getLogger().severe("Couldn't send " +
                     (player == null ? "a player's" : (player.getName() + "'s")) +
                     " global message: " + msg);
@@ -144,5 +159,10 @@ public final class Main extends JavaPlugin {
                 player.sendMessage(failed);
             }
         }
+
+        out.writeShort(msgbytes.toByteArray().length);
+        out.write(msgbytes.toByteArray());
+
+        Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
     }
 }
