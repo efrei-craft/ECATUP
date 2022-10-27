@@ -36,7 +36,7 @@ public class WhoIs implements CommandExecutor {
 
     LuckPerms LP = Main.LP;
 
-    final TextColor KEY_COLOR = NamedTextColor.DARK_AQUA;
+    final TextColor KEY_COLOR = NamedTextColor.AQUA;
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
 
 

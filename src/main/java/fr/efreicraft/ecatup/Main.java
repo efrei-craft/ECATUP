@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
 import fr.efreicraft.ecatup.listeners.*;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -64,7 +66,20 @@ public final class Main extends JavaPlugin {
         registerCommand("gmc", new Gmc());
         registerCommand("gmsp", new Gmsp());
         registerCommand("skull", new Skull());
+        registerCommand("slap", new Slap());
         registerCommand("whois", new WhoIs());
+
+        // Send log to Discord
+        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+            .setTitle("Serveur")
+            .setDescription("Le serveur a démarré !")
+            .setColor(java.awt.Color.decode("#ffffff"))
+            .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+        );
+        try {
+            webhook.execute();
+        } catch (IOException ignored) {}
     }
 
     @Override
@@ -80,6 +95,18 @@ public final class Main extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        // Send log to Discord
+        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                .setTitle("Serveur")
+                .setDescription("Le serveur s'est arrêté !")
+                .setColor(java.awt.Color.decode("#ffffff"))
+                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+        );
+        try {
+            webhook.execute();
+        } catch (IOException ignored) {}
     }
 
     void registerCommand(String command, CommandExecutor executor) {

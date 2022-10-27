@@ -1,6 +1,7 @@
 package fr.efreicraft.ecatup.listeners;
 
 import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -12,6 +13,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.awt.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -22,11 +25,10 @@ public class Chat implements Listener {
     LuckPerms LP = Main.LP;
 
     @EventHandler
-    public void onChat(AsyncChatEvent event) {
+    public void onChat(AsyncChatEvent event) throws IOException {
         event.setCancelled(true);
 
         boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
-        boolean global = ((TextComponent) event.message()).content().toCharArray()[0] == '@';
 
         Component msg = event.getPlayer().displayName()
                 .append(Component.text(ChatColor.GRAY + ": "))
@@ -41,5 +43,18 @@ public class Chat implements Listener {
         Bukkit.broadcast(msg
                 .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Copier")))
                 .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT)));
+
+        // Send log to Discord
+        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
+        String playerName = event.getPlayer().getName();
+        String message = ((TextComponent)event.message()).content();
+        webhook.setContent("");
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                .setTitle("Message")
+                .setDescription("**" + playerName + "** : " + message)
+                .setColor(Color.decode("#3498db"))
+                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+        );
+        webhook.execute();
     }
 }
