@@ -1,11 +1,13 @@
 package fr.efreicraft.ecatup.commands;
 
+import fr.efreicraft.ecatup.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -17,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Skull implements CommandExecutor {
+public class Skull implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
@@ -38,15 +40,8 @@ public class Skull implements CommandExecutor {
         return true;
     }
 
+    @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 1) {
-            List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
-            List<String> results = new ArrayList<>();
-            players.forEach(player -> results.add(player.getName()));
-            players.clear(); // get rid of some space & memory
-            return results;
-        }
-
-        return null;
+        return args.length == 1 ? Main.getPlayersForTabList(args, 1) : null;
     }
 }
