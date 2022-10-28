@@ -23,6 +23,8 @@ public class Join implements Listener {
     LuckPerms LP = Main.LP;
     @EventHandler
     public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) throws IOException {
+        LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().invalidate();
+
         // Get player rank from Association Database
         ResultSet result = null;
         try {
@@ -132,6 +134,7 @@ public class Join implements Listener {
         );
         webhook.execute();
 
+        LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().invalidate();
     }
 
 }
