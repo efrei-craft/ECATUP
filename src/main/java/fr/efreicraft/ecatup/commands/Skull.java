@@ -39,6 +39,6 @@ public class Skull implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return args.length == 1 ? Main.getPlayersForTabList(args, 1) : null;
+        return args.length == 1 ? Main.getPlayersForTabList(args, 0) : null;
     }
 }
