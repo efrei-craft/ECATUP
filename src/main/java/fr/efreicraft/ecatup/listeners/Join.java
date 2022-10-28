@@ -134,8 +134,4 @@ public class Join implements Listener {
 
     }
 
-    @EventHandler
-    public void onServerListPing(PaperServerListPingEvent e) {
-        e.setServerIcon(Bukkit.getServerIcon());
-    }
 }
