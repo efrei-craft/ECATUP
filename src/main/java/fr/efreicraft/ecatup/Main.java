@@ -48,16 +48,10 @@ public final class Main extends JavaPlugin {
         LP = LuckPermsProvider.get();
 
         // Load config
+        saveDefaultConfig();
         config = INSTANCE.getConfig();
-        config.addDefault("server_name", "lobby");
-        config.addDefault("database.host", "127.0.0.1");
-        config.addDefault("database.port", 3306);
-        config.addDefault("database.database", "db");
-        config.addDefault("database.user", "user");
-        config.addDefault("database.password", "pwd");
-
-        config.options().copyDefaults(true);
-        saveConfig();
+        config.options().copyDefaults(true); // au cas où le fichier existe mais est incomplet.
+        INSTANCE.saveConfig();
 
         // Connect to MariaDB database
 
