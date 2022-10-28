@@ -130,6 +130,11 @@ public final class Main extends JavaPlugin {
                 .setColor(java.awt.Color.decode("#ffffff"))
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            sendPlayerToServer(player, "lobby");
+        }
+
         try {
             webhook.execute();
         } catch (IOException ignored) {}
