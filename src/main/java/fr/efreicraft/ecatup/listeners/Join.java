@@ -53,6 +53,10 @@ public class Join implements Listener {
 
                         case "Beta Tester" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.beta").build());
 
+                        case "Builder" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.builder").build());
+
+                        case "Responsable 1P" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.respo1p").build());
+
                         case "Responsable Event", "Responsable Dev", "Responsable Infra", "Responsable Comm", "Responsable Build", "Responsable Design" -> {
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.be").build());
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("prefix.10.&c&l[" + rank + "] &c").build());
