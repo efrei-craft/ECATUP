@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.EventBus;
 import net.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -25,6 +26,9 @@ public class LuckPermsListener implements Listener {
         if (player != null) {
             player.displayName(Component.text(colorize(event.getUser().getCachedData().getMetaData().getPrefix()) + player.getName()));
             player.playerListName(player.displayName());
+            User user = Main.LP.getUserManager().getUser(event.getUser().getUsername());
+            if (user != null)
+                user.getCachedData().invalidate();
         }
     }
 }
