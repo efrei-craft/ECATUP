@@ -1,5 +1,6 @@
 package fr.efreicraft.ecatup.listeners;
 
+import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.PreferenceCache;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
@@ -127,5 +128,10 @@ public class Join implements Listener {
         );
         webhook.execute();
 
+    }
+
+    @EventHandler
+    public void onServerListPing(PaperServerListPingEvent e) {
+        e.setServerIcon(Bukkit.getServerIcon());
     }
 }
