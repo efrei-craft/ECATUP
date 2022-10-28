@@ -9,7 +9,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -17,10 +16,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 

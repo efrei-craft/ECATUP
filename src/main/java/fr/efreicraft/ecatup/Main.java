@@ -3,12 +3,11 @@ package fr.efreicraft.ecatup;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
-import fr.efreicraft.ecatup.listeners.*;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.luckperms.api.LuckPerms;
@@ -28,7 +27,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -150,6 +148,13 @@ public final class Main extends JavaPlugin {
     }
 
     public static void sendPlayerToServer(Player player, String server) {
+        if (!player.hasPermission("server." + server.toLowerCase())) {
+            Component nope = Component.text("Vous ne pouvez pas aller sur ce serveur !").color(NamedTextColor.RED);
+            player.sendMessage(nope);
+            INSTANCE.getLogger().info(player.getName() + " tried to join " + server + " but doesn't have permission to do so.");
+            return;
+        }
+
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
@@ -175,7 +180,7 @@ public final class Main extends JavaPlugin {
                     (player == null ? "a player's" : (player.getName() + "'s")) +
                     " global message: " + msg);
             if (player != null) {
-                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveur.").color(NamedTextColor.DARK_RED);
+                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveurs.").color(NamedTextColor.DARK_RED);
                 player.sendMessage(failed);
             }
         }

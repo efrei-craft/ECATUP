@@ -1,6 +1,5 @@
 package fr.efreicraft.ecatup.commands;
 
-import com.google.common.collect.Lists;
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.PreferenceCache;
 import org.bukkit.Bukkit;

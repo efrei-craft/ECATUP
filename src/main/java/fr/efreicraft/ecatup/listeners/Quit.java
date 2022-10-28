@@ -1,8 +1,8 @@
 package fr.efreicraft.ecatup.listeners;
 
 import fr.efreicraft.ecatup.Main;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import fr.efreicraft.ecatup.PreferenceCache;
+import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
