@@ -18,10 +18,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
@@ -68,8 +67,6 @@ public class WhoIs implements CommandExecutor {
         Component message;
 
         /* Obtenir les rangs */
-        Group[] LPcollection = getRanks(player).join().toArray(new Group[0]);
-//        List<String> ranks = LPcollection == null ? Collections.emptyList() : LPcollection.stream().map(Group::getName).collect(Collectors.toList());
         String highestRank = LP.getUserManager().loadUser(player.getUniqueId()).join().getCachedData().getMetaData().getPrefix();
 
         message = Component.join(JoinConfiguration.newlines(),
@@ -81,18 +78,11 @@ public class WhoIs implements CommandExecutor {
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
-        sender.sendMessage(colorize("&8======  &6" + player.getName() + "&8  ======"));
+        sender.sendMessage(colorize((player.isOnline() ? "&8======  &a" : "&8======  &4") + player.getName() + "&8  ======"));
         sender.sendMessage(message);
         sender.sendMessage(colorize("&8========" + new String(new char[player.getName().length()]).replace("\0", "=") + "========"));
 
         return true;
     }
 
-    private CompletableFuture<Collection<Group>> getRanks(OfflinePlayer player) {
-        UUID uuid = player.getUniqueId();
-
-        return LP.getUserManager().loadUser(uuid).thenApplyAsync(
-                user -> user.getInheritedGroups(user.getQueryOptions())
-        );
-    }
 }
