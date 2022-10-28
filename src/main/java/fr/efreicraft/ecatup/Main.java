@@ -175,7 +175,7 @@ public final class Main extends JavaPlugin {
                     (player == null ? "a player's" : (player.getName() + "'s")) +
                     " global message: " + msg);
             if (player != null) {
-                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveur.").color(NamedTextColor.DARK_RED);
+                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveurs.").color(NamedTextColor.DARK_RED);
                 player.sendMessage(failed);
             }
         }
