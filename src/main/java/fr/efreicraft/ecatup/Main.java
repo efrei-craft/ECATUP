@@ -20,6 +20,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -76,8 +77,8 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Register commands
-        if (Bukkit.getPluginManager().getPlugin("ECLobby") == null) {
-            registerCommand("lobby", new Lobby()); // Only register /lobby if ECLobby is not installed
+        if (!config.getString("server_name").equals("lobby")) {
+            registerCommand("lobby", new Lobby()); // Only register /lobby if the server's name is "lobby"
         }
 
         registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
@@ -99,7 +100,7 @@ public final class Main extends JavaPlugin {
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
             .setTitle("Serveur")
             .setDescription("Le serveur a démarré !")
-            .setColor(java.awt.Color.decode("#ffffff"))
+            .setColor(Color.white)
             .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
         try {
@@ -130,6 +131,11 @@ public final class Main extends JavaPlugin {
                 .setColor(java.awt.Color.decode("#ffffff"))
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            sendPlayerToServer(player, "lobby");
+        }
+
         try {
             webhook.execute();
         } catch (IOException ignored) {}

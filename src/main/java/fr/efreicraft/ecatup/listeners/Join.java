@@ -1,5 +1,6 @@
 package fr.efreicraft.ecatup.listeners;
 
+import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.PreferenceCache;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
@@ -51,6 +52,10 @@ public class Join implements Listener {
                         case "Membre" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.member").build());
 
                         case "Beta Tester" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.beta").build());
+
+                        case "Builder" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.builder").build());
+
+                        case "Responsable 1P" -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.respo1p").build());
 
                         case "Responsable Event", "Responsable Dev", "Responsable Infra", "Responsable Comm", "Responsable Build", "Responsable Design" -> {
                             LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.be").build());
@@ -128,4 +133,5 @@ public class Join implements Listener {
         webhook.execute();
 
     }
+
 }
