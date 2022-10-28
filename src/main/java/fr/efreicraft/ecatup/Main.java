@@ -150,6 +150,13 @@ public final class Main extends JavaPlugin {
     }
 
     public static void sendPlayerToServer(Player player, String server) {
+        if (!player.hasPermission("server." + server.toLowerCase())) {
+            Component nope = Component.text("Vous ne pouvez pas aller sur ce serveur !").color(NamedTextColor.RED);
+            player.sendMessage(nope);
+            INSTANCE.getLogger().info(player.getName() + " tried to join " + server + " but doesn't have permission to do so.");
+            return;
+        }
+
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(server);
