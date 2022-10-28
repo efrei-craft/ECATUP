@@ -20,6 +20,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -99,7 +100,7 @@ public final class Main extends JavaPlugin {
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
             .setTitle("Serveur")
             .setDescription("Le serveur a démarré !")
-            .setColor(java.awt.Color.decode("#ffffff"))
+            .setColor(Color.white)
             .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
         try {
