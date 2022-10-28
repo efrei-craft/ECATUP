@@ -76,8 +76,8 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Register commands
-        if (Bukkit.getPluginManager().getPlugin("ECLobby") == null) {
-            registerCommand("lobby", new Lobby()); // Only register /lobby if ECLobby is not installed
+        if (!config.getString("server_name").equals("lobby")) {
+            registerCommand("lobby", new Lobby()); // Only register /lobby if the server's name is "lobby"
         }
 
         registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
