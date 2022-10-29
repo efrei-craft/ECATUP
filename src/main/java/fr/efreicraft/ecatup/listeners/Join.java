@@ -1,6 +1,5 @@
 package fr.efreicraft.ecatup.listeners;
 
-import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
 import fr.efreicraft.ecatup.Main;
 import fr.efreicraft.ecatup.PreferenceCache;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
@@ -23,6 +22,8 @@ public class Join implements Listener {
     LuckPerms LP = Main.LP;
     @EventHandler
     public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) throws IOException {
+        LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().invalidate();
+
         // Get player rank from Association Database
         ResultSet result = null;
         try {
@@ -70,6 +71,8 @@ public class Join implements Listener {
                         default -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.visitor").build());
                     }
                     LP.getUserManager().saveUser(LP.getUserManager().getUser(event.getPlayer().getUniqueId()));
+                    networkSync();
+                    
                     // Check if player has permission to connect to this server
                     if (!event.getPlayer().hasPermission("server." + Main.config.getString("server_name"))) {
                         event.getPlayer().kick(Component.text("§cVous n'avez pas la permission d'accéder ce serveur !"));
@@ -115,6 +118,7 @@ public class Join implements Listener {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().invalidate();
         String prefix = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
         event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
         event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
@@ -131,7 +135,10 @@ public class Join implements Listener {
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
         webhook.execute();
+    }
 
+    public void networkSync() {
+        LP.runUpdateTask();
     }
 
 }
