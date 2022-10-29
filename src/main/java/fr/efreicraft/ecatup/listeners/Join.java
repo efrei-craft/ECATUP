@@ -72,6 +72,8 @@ public class Join implements Listener {
                         default -> LP.getUserManager().getUser(event.getPlayer().getUniqueId()).data().add(Node.builder("group.visitor").build());
                     }
                     LP.getUserManager().saveUser(LP.getUserManager().getUser(event.getPlayer().getUniqueId()));
+                    networkSync();
+                    
                     // Check if player has permission to connect to this server
                     if (!event.getPlayer().hasPermission("server." + Main.config.getString("server_name"))) {
                         event.getPlayer().kick(Component.text("§cVous n'avez pas la permission d'accéder ce serveur !"));
@@ -135,6 +137,10 @@ public class Join implements Listener {
         webhook.execute();
 
         LP.getUserManager().getUser(event.getPlayer().getUniqueId()).getCachedData().invalidate();
+    }
+
+    public void networkSync() {
+        LP.runUpdateTask();
     }
 
 }
