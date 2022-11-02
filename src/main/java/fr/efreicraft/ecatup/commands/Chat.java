@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
@@ -101,11 +102,9 @@ public class Chat implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) return Collections.emptyList();
 
-        List<String> result = new ArrayList<>();
-        Arrays.stream(PreferenceCache.ChatChannel.values())
+        List<String> result = Arrays.stream(PreferenceCache.ChatChannel.values())
                 .filter(channel -> channel.toString().startsWith(args[0].toUpperCase()))
-                .filter(channel -> !"GLOBAL".contains(args[0].toUpperCase()) || sender.hasPermission("ecatup.channel.global"))
-                .forEach(channel -> result.add(channel.toString()));
+                .filter(channel -> sender.hasPermission("ecatup.channel.global") || channel != PreferenceCache.ChatChannel.GLOBAL).map(Enum::toString).collect(Collectors.toList());
 
         return result;
     }
