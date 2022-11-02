@@ -104,6 +104,7 @@ public class Chat implements CommandExecutor, TabExecutor {
         List<String> result = new ArrayList<>();
         Arrays.stream(PreferenceCache.ChatChannel.values())
                 .filter(channel -> channel.toString().startsWith(args[0].toUpperCase()))
+                .filter(channel -> !"GLOBAL".contains(args[0].toUpperCase()) || sender.hasPermission("ecatup.channel.global"))
                 .forEach(channel -> result.add(channel.toString()));
 
         return result;
