@@ -26,3 +26,8 @@ autolabeler:
       - '/feature\/.+/'
     body:
       - '/JIRA-[0-9]{1,4}/'
+
+template: |
+  ## What’s Changed
+
+  $CHANGES
