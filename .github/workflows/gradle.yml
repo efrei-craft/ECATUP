@@ -9,9 +9,9 @@ name: Gradle
 
 on:
   push:
-    branches: [ "development", "stable" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "development", "stable" ]
+    branches: [ "*" ]
 
 permissions:
   contents: read
