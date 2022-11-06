@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +75,7 @@ public class Chat implements CommandExecutor, TabExecutor {
 
     public void sendChannelPrefToDB(Player player, PreferenceCache.ChatChannel channel) {
         try {
-            PreparedStatement verifyIfHasEntry = Main.connection.prepareStatement("SELECT * FROM `usersPrefs` WHERE mcUUID=?");
+            PreparedStatement verifyIfHasEntry = Main.DB.prepareStatement("SELECT * FROM `usersPrefs` WHERE mcUUID=?");
             verifyIfHasEntry.setString(1, player.getUniqueId().toString());
             ResultSet result1 = verifyIfHasEntry.executeQuery();
             boolean hasEntryInDB = result1.next();
@@ -84,7 +83,7 @@ public class Chat implements CommandExecutor, TabExecutor {
             verifyIfHasEntry.close();
             result1.close();
 
-            PreparedStatement applyChanges = Main.connection.prepareStatement(hasEntryInDB ? "UPDATE `usersPrefs` SET channel=? WHERE mcUUID=?"
+            PreparedStatement applyChanges = Main.DB.prepareStatement(hasEntryInDB ? "UPDATE `usersPrefs` SET channel=? WHERE mcUUID=?"
                     : "INSERT INTO `usersPrefs` (channel, mcUUID) VALUES(?,?)");
 
             applyChanges.setInt(1, channel.ID);
