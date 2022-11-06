@@ -60,6 +60,7 @@ public final class Main extends JavaPlugin {
                     config.getString("database.database"),
                     config.getString("database.user"),
                     config.getString("database.password"));
+            DB.open();
         } catch (Exception e) {
             e.printStackTrace();
         }
