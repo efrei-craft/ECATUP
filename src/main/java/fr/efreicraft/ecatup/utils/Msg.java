@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Msg {
     public static String colorize(String message) {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, "null"));
+        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, nullText()));
     }
 
     public static String colorize(TextComponent message) {
