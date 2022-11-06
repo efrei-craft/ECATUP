@@ -1,6 +1,5 @@
 # ECATUP (_Efrei Craft's Awesome Tools and Utilities Plugin_)
 
----
 [![Java CI with Gradle](https://github.com/efrei-craft/ECATUP/actions/workflows/gradle.yml/badge.svg)](https://github.com/efrei-craft/ECATUP/actions/workflows/gradle.yml)
 
 ## Les commandes et fonctions utiles d'Efrei Craft

@@ -8,15 +8,10 @@ import java.util.Objects;
 
 public class Msg {
     public static String colorize(String message) {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, "null"));
+        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, ""));
     }
 
     public static String colorize(TextComponent message) {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message.content(), nullText()));
-    }
-
-    private static String nullText() {
-        Bukkit.getLogger().warning("Tried to colorize a null text (LuckPerms is at it again...)");
-        return "null";
+        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message.content(), ""));
     }
 }
