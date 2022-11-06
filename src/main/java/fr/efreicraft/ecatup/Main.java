@@ -7,6 +7,7 @@ import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
+import fr.efreicraft.ecatup.utils.DBConnection;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -24,8 +25,6 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
     public static FileConfiguration config;
-    public static Connection connection;
+    public static DBConnection DB;
     public static LuckPerms LP;
 
 
@@ -56,12 +55,11 @@ public final class Main extends JavaPlugin {
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mariadb://"
-                    + config.getString("database.host")
-                    + ":" + config.getInt("database.port") + "/" + config.getString("database.database")
-                    + "?user=" + config.getString("database.user")
-                    + "&password=" + config.getString("database.password")
-                    + "&autoReconnect=true");
+            DB = new DBConnection(config.getString("database.host"),
+                    config.getInt("database.port"),
+                    config.getString("database.database"),
+                    config.getString("database.user"),
+                    config.getString("database.password"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,11 +115,7 @@ public final class Main extends JavaPlugin {
         getServer().getMessenger().unregisterIncomingPluginChannel(INSTANCE);
 
         // Close database connection
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        DB.close();
 
         // Send log to Discord
         DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
@@ -131,10 +125,10 @@ public final class Main extends JavaPlugin {
                 .setColor(java.awt.Color.decode("#ffffff"))
                 .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
         );
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            sendPlayerToServer(player, "lobby");
-        }
+        if (!config.getString("server_name", "").equalsIgnoreCase("lobby"))
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                sendPlayerToServer(player, "lobby");
+            }
 
         try {
             webhook.execute();
