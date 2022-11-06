@@ -30,7 +30,7 @@ public class Join implements Listener {
             String rank = "Visiteur";
 
             /* ===== ROLES STUFF ===== */
-            PreparedStatement mcLinkStatement = Main.connection.prepareStatement("SELECT * FROM `discordmclink` WHERE `mcaccount` = ?");
+            PreparedStatement mcLinkStatement = Main.DB.prepareStatement("SELECT * FROM `discordmclink` WHERE `mcaccount` = ?");
             mcLinkStatement.setString(1, event.getPlayer().getName());
             Bukkit.getLogger().info("Getting discord ID for " + event.getPlayer().getName());
 
@@ -38,7 +38,7 @@ public class Join implements Listener {
             result = mcLinkStatement.executeQuery();
             if (result.next()) {
                 String discordId = result.getString("discordid");
-                PreparedStatement memberDataStatement = Main.connection.prepareStatement("SELECT * FROM `members` WHERE `discordid` = ?");
+                PreparedStatement memberDataStatement = Main.DB.prepareStatement("SELECT * FROM `members` WHERE `discordid` = ?");
                 memberDataStatement.setString(1, discordId);
                 Bukkit.getLogger().info("Getting rank for " + discordId);
                 // Execute query
@@ -99,7 +99,7 @@ public class Join implements Listener {
             result.close();
             
             /* ===== PREFERENCES STUFF ===== */
-            PreparedStatement userPrefsStatement = Main.connection.prepareStatement("SELECT * FROM `usersPrefs` WHERE `mcUUID` = ?");
+            PreparedStatement userPrefsStatement = Main.DB.prepareStatement("SELECT * FROM `usersPrefs` WHERE `mcUUID` = ?");
             userPrefsStatement.setString(1, event.getPlayer().getUniqueId().toString());
             Bukkit.getLogger().info("Getting " + event.getPlayer().getName() + "'s user preferences");
 
