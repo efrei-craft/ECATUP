@@ -6,6 +6,7 @@ import org.mariadb.jdbc.Connection;
 import org.mariadb.jdbc.Driver;
 
 import javax.annotation.Nullable;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
@@ -27,14 +28,12 @@ public class DBConnection {
 
     public boolean open() {
         try {
-            connection = Driver.connect(new Configuration.Builder()
-                    .addHost(this.HOST, this.PORT)
-                    .database(this.DATABASE)
-                    .user(this.USER)
-                    .password(this.PASSWORD)
-                    .socketTimeout(0)
-                    .maxIdleTime(0)
-                    .build());
+            connection = (Connection) DriverManager.getConnection("jdbc:mariadb://"
+                    + this.HOST
+                    + ":" + this.PORT + "/" + this.DATABASE
+                    + "?user=" + this.USER
+                    + "&password=" + this.PASSWORD
+                    + "&autoReconnect=true");
         } catch (SQLException e) {
             e.printStackTrace();
             Bukkit.getLogger().severe("Couldn't open connection to database!");
