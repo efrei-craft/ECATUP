@@ -25,12 +25,12 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnstableApiUsage")
 public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
@@ -75,7 +75,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Register commands
-        if (!config.getString("server_name").equals("lobby")) {
+        if (!config.getString("server_name", "").equals("lobby")) {
             registerCommand("lobby", new Lobby()); // Only register /lobby if the server's name is "lobby"
         }
 
