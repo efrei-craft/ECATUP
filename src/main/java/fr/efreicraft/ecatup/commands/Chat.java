@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
+@SuppressWarnings("ConstantConditions")
 public class Chat implements CommandExecutor, TabExecutor {
 
     @Override
