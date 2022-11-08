@@ -79,7 +79,7 @@ public class Join implements Listener {
 
                         default -> user.data().add(Node.builder("group.visitor").build());
                     }
-                    LP.getUserManager().saveUser(LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join()).join();
+                    LP.getUserManager().saveUser(user).join();
                     networkSync();
 
                     // Check if player has permission to connect to this server
