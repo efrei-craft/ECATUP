@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * Class used to execute Discord Webhooks with low effort
- * Come from: https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb
+ * Come from: <a href="https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb">...</a>
  */
 
 public class DiscordWebhook {
