@@ -28,15 +28,16 @@ public class WhoIs implements CommandExecutor {
      * Serveur (si connecté): serveur
      **/
 
-    LuckPerms LP = Main.LP;
+    final LuckPerms LP = Main.LP;
 
     final TextColor KEY_COLOR = NamedTextColor.AQUA;
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
 
 
     // Jsuis obligé
-    HoverEvent<Component> CLICK_TO_COPY = HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Cliquez pour copier !"));
+    final HoverEvent<Component> CLICK_TO_COPY = HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text("Cliquez pour copier !"));
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // ========== PRECISION : ON PEUT S'AUTO-WHOIS (because I said so) ==========

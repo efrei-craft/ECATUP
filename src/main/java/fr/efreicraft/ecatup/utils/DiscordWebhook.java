@@ -14,6 +14,7 @@ import java.util.*;
  * Come from: <a href="https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb">...</a>
  */
 
+@SuppressWarnings("FieldMayBeFinal")
 public class DiscordWebhook {
 
     private final String url;
@@ -150,10 +151,11 @@ public class DiscordWebhook {
         stream.flush();
         stream.close();
 
-        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
+        connection.getInputStream().close(); //I'm not sure why, but it doesn't work without getting the InputStream
         connection.disconnect();
     }
 
+    @SuppressWarnings("FieldMayBeFinal")
     public static class EmbedObject {
         private String title;
         private String description;
@@ -247,6 +249,7 @@ public class DiscordWebhook {
             return this;
         }
 
+        @SuppressWarnings("FieldMayBeFinal")
         private class Footer {
             private String text;
             private String iconUrl;
@@ -265,6 +268,7 @@ public class DiscordWebhook {
             }
         }
 
+        @SuppressWarnings("FieldMayBeFinal")
         private class Thumbnail {
             private String url;
 
@@ -277,6 +281,7 @@ public class DiscordWebhook {
             }
         }
 
+        @SuppressWarnings("FieldMayBeFinal")
         private class Image {
             private String url;
 
@@ -289,6 +294,7 @@ public class DiscordWebhook {
             }
         }
 
+        @SuppressWarnings("FieldMayBeFinal")
         private class Author {
             private String name;
             private String url;
@@ -313,6 +319,7 @@ public class DiscordWebhook {
             }
         }
 
+        @SuppressWarnings("FieldMayBeFinal")
         private class Field {
             private String name;
             private String value;
@@ -366,7 +373,7 @@ public class DiscordWebhook {
                 } else if (val instanceof Boolean) {
                     builder.append(val);
                 } else if (val instanceof JSONObject) {
-                    builder.append(val.toString());
+                    builder.append(val);
                 } else if (val.getClass().isArray()) {
                     builder.append("[");
                     int len = Array.getLength(val);

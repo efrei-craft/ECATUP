@@ -13,7 +13,7 @@ import static fr.efreicraft.ecatup.utils.Msg.colorize;
 public class Gms implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = null;
+        Player player;
         if (args.length == 0) {
             if (sender instanceof Player) {
                 player = (Player) sender;
