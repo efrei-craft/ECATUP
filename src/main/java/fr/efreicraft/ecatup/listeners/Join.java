@@ -65,9 +65,11 @@ public class Join implements Listener {
 
                         case "Builder" -> user.data().add(Node.builder("group.builder").build());
 
+                        case "Dev" -> user.data().add(Node.builder("group.dev").build());
+
                         case "Responsable 1P" -> user.data().add(Node.builder("group.respo1p").build());
 
-                        case "Responsable Event", "Responsable Dev", "Responsable Infra", "Responsable Comm", "Responsable Build", "Responsable Design" -> {
+                        case "Responsable Dev", "Responsable Build", "Responsable Design" -> {
                             user.data().add(Node.builder("group.be").build());
                             user.data().add(Node.builder("prefix.10.&c&l[" + rank + "] &c").build());
                         }

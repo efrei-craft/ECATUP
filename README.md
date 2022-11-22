@@ -17,6 +17,7 @@
 | `ecatup.channel.global` | Permet au joueur d'envoyer des messages dans le canal GLOBAL.    |
 | `ecatup.channel.server` | Permet au joueur d'envoyer des messages dans le canal SERVER.    |
 | `ecatup.channel.team`   | Permet au joueur d'envoyer des messages dans le canal TEAM.      |
+| `ecatup.slap`           | Permet au joueur d'utiliser la commande `/slap`.                 |
 | `server.<server_name>`  | Permet au joueur de se connecter au serveur `<server_name>`.     |
 
 ### Commandes
