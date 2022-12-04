@@ -26,6 +26,8 @@ permissions:
     description: Permet l'utilisation de '&' pour colorer son texte
   ecatup.slap:
     description: Permet d'utiliser /slap
+  ecatup.sudo:
+    description: Permet d'utiliser /sudo
   ecatup.channel.use:
     description: Permet d'utiliser /channel
   ecatup.channel:
@@ -74,6 +76,10 @@ commands:
     aliases:
       - bitchslap
     permission: /slap <player> [-a]
+  sudo:
+    description: Makes someone say something or execute a command
+    usage: /sudo <player> [c:<message> OR <command>]
+    permission: ecatup.sudo
   whois:
     description: Get info about a player
     usage: /whois [player]

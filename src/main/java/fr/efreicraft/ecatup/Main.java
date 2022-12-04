@@ -93,6 +93,7 @@ public final class Main extends JavaPlugin {
         registerCommand("gmsp", new Gmsp());
         registerCommand("skull", new Skull());
         registerCommand("slap", new Slap());
+        registerCommand("sudo", new Sudo());
         registerCommand("whois", new WhoIs());
 
         // Send log to Discord
