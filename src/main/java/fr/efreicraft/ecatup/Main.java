@@ -3,6 +3,7 @@ package fr.efreicraft.ecatup;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
+import fr.efreicraft.ecatup.commands.gamemode.*;
 import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
