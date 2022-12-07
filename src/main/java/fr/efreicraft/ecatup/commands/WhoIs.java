@@ -71,6 +71,9 @@ public class WhoIs implements CommandExecutor {
                                 .hoverEvent(CLICK_TO_COPY),
                         Component.join(JoinConfiguration.noSeparators(), Component.text("Rang: ", KEY_COLOR), Component.text(highestRank == null ? "rien" : colorize(highestRank), VALUE_COLOR, TextDecoration.BOLD)
                                 .clickEvent(ClickEvent.copyToClipboard(highestRank == null ? "rien" : colorize(highestRank))))
+                                .hoverEvent(CLICK_TO_COPY),
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Pos: ", KEY_COLOR), Component.text(player.isOnline() ? ((Player) player).getLocation().toString() : "couldn't get pos...", VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(player.isOnline() ? ((Player) player).getLocation().toString() : "couldn't get pos...")))
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
