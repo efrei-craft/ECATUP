@@ -4,13 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Sudo implements CommandExecutor {
+public class Sudo implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length <= 1) return false;
@@ -21,9 +24,16 @@ public class Sudo implements CommandExecutor {
 
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         for (Player player : playerList) {
-            if (!sender.equals(player)) // il faut éviter l'auto sudo comme /sudo <moi-même> /sudo <moi-même> /say hi!
+//            if (!sender.equals(player)) // il faut éviter l'auto sudo comme /sudo <moi-même> /sudo <moi-même> /say hi!
                 player.chat(message);
         }
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length != 1) return new ArrayList<>();
+
+        return null;
     }
 }
