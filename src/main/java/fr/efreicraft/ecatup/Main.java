@@ -3,6 +3,10 @@ package fr.efreicraft.ecatup;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
+import fr.efreicraft.ecatup.commands.gamemode.*;
+import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
+import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
+import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
 import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
@@ -85,13 +89,17 @@ public final class Main extends JavaPlugin {
             Bukkit.getPluginManager().addPermission(new Permission("ecatup.channel." + channel.toString().toLowerCase()));
         }
 
+        registerCommand("flyspeed", new FlySpeed());
         registerCommand("gm", new Gm());
         registerCommand("gms", new Gms());
         registerCommand("gma", new Gma());
         registerCommand("gmc", new Gmc());
         registerCommand("gmsp", new Gmsp());
+        registerCommand("resetspeed", new ResetSpeed());
         registerCommand("skull", new Skull());
         registerCommand("slap", new Slap());
+        registerCommand("sudo", new Sudo());
+        registerCommand("walkspeed", new WalkSpeed());
         registerCommand("whois", new WhoIs());
 
         // Send log to Discord

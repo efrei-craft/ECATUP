@@ -1,4 +1,4 @@
-package fr.efreicraft.ecatup.commands;
+package fr.efreicraft.ecatup.commands.gamemode;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
-public class Gmc implements CommandExecutor {
+public class Gmsp implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player;
@@ -30,8 +30,8 @@ public class Gmc implements CommandExecutor {
                 return true;
             }
         }
-        player.setGameMode(GameMode.CREATIVE);
-        player.sendMessage(colorize("&aVous êtes maintenant en mode créatif !"));
+        player.setGameMode(GameMode.SPECTATOR);
+        player.sendMessage(colorize("&aVous êtes maintenant en mode spectateur !"));
         return true;
     }
 }
