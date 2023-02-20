@@ -1,160 +1,80 @@
 package fr.efreicraft.ecatup.listeners;
 
-import fr.efreicraft.ecatup.Main;
-import fr.efreicraft.ecatup.PreferenceCache;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
+import fr.efreicraft.animus.endpoints.Players;
+import io.swagger.client.ApiException;
+import io.swagger.client.model.Player;
 import net.kyori.adventure.text.Component;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.Node;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import static fr.efreicraft.ecatup.utils.Msg.colorize;
+import static fr.efreicraft.ecatup.Main.INSTANCE;
 
 public class Join implements Listener {
-    static final LuckPerms LP = Main.LP;
-    static Set<UUID> isNotDone = new HashSet<>();
 
-    // Histoire d'exécuter cet event APRES le onJoin de LP
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) throws IOException {
-        isNotDone.add(event.getPlayer().getUniqueId());
-        User user = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join();
-
-        // Get player rank from Association Database
-        ResultSet result = null;
+    @EventHandler
+    public static void onJoin(PlayerJoinEvent event) {
+        Player player;
         try {
-            String rank;
-
-            /* ===== ROLES STUFF ===== */
-            PreparedStatement mcLinkStatement = Main.DB.openThenGetConnection().prepareStatement("SELECT * FROM `discordmclink` WHERE `mcaccount` = ?");
-            mcLinkStatement.setString(1, event.getPlayer().getName());
-            Bukkit.getLogger().info("Getting discord ID for " + event.getPlayer().getName());
-
-            // Execute query
-            result = mcLinkStatement.executeQuery();
-            if (result.next()) {
-                String discordId = result.getString("discordid");
-                PreparedStatement memberDataStatement = Main.DB.openThenGetConnection().prepareStatement("SELECT * FROM `members` WHERE `discordid` = ?");
-                memberDataStatement.setString(1, discordId);
-                Bukkit.getLogger().info("Getting rank for " + discordId);
-                // Execute query
-                ResultSet memberDataResult = memberDataStatement.executeQuery();
-                if (memberDataResult.next()) {
-                    rank = memberDataResult.getString("rank");
-                    Bukkit.getLogger().info("Rank for " + event.getPlayer().getName() + " is " + rank);
-                    // Remove player permissions
-                    user.data().clear();
-                    // Set player rank
-                    switch (rank) {
-                        case "Membre" -> user.data().add(Node.builder("group.member").build());
-
-                        case "Beta Tester" -> user.data().add(Node.builder("group.beta").build());
-
-                        case "Builder" -> user.data().add(Node.builder("group.builder").build());
-
-                        case "Dev" -> user.data().add(Node.builder("group.dev").build());
-
-                        case "Responsable 1P" -> user.data().add(Node.builder("group.respo1p").build());
-
-                        case "WEI" -> user.data().add(Node.builder("group.wei").build());
-
-                        case "Responsable Dev", "Responsable Build", "Responsable Design" -> {
-                            user.data().add(Node.builder("group.be").build());
-                            user.data().add(Node.builder("prefix.10.&c&l[" + rank + "] &c").build());
-                        }
-
-                        case "Président", "Vice-Président", "Trésorier", "Secrétaire" -> {
-                            user.data().add(Node.builder("group.br").build());
-                            user.data().add(Node.builder("prefix.10.&4&l[" + rank + "] &4").build());
-                        }
-
-                        default -> user.data().add(Node.builder("group.visitor").build());
-                    }
-                    LP.getUserManager().saveUser(user).join();
-                    networkSync();
-
-                    // Check if player has permission to connect to this server
-                    if (!event.getPlayer().hasPermission("server." + Main.config.getString("server_name"))) {
-                        event.getPlayer().kick(Component.text("§cVous n'avez pas la permission d'accéder ce serveur !"));
-                        event.joinMessage(null);
-                        return;
-                    }
-                    
-                    memberDataStatement.close();
-                    memberDataResult.close();
-                } else {
-                    Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
-                    event.getPlayer().kick(Component.text(colorize("&cVeuillez lier votre compte Discord pour accéder au serveur !")));
-                    event.joinMessage(null);
-                    return;
-                }
-            } else {
-                Bukkit.getLogger().warning("No rank found for " + event.getPlayer().getName());
-                event.getPlayer().kick(Component.text(colorize("&cVeuillez lier votre compte Discord pour accéder au serveur !")));
-                event.joinMessage(null);
+            player = Players.justConnected(event.getPlayer().getUniqueId().toString(), event.getPlayer().getName());
+        }
+        catch (ApiException e) {
+            if (e.getCode() == 400) {
+                event.getPlayer().kick(Component.text("Vous êtes banni d'Efrei Craft!").color(NamedTextColor.RED));
+                //TODO get le bannissement de la BDD pour afficher les détails
                 return;
             }
+            INSTANCE.getLogger().severe("Couldn't get " + event.getPlayer().getName() + "'s info...");
+            String date = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(Date.from(Instant.now(Clock.systemUTC())));
 
-            mcLinkStatement.close();
-            result.close();
-            
-            /* ===== PREFERENCES STUFF ===== */
-            PreparedStatement userPrefsStatement = Main.DB.openThenGetConnection().prepareStatement("SELECT * FROM `usersPrefs` WHERE `mcUUID` = ?");
-            userPrefsStatement.setString(1, event.getPlayer().getUniqueId().toString());
-            Bukkit.getLogger().info("Getting " + event.getPlayer().getName() + "'s user preferences");
+            try {
+                File errFolder = new File(INSTANCE.getDataFolder().getAbsolutePath() + "\\errorLogs\\");
+                if (!errFolder.exists())
+                    if (!errFolder.mkdirs())
+                        throw new IOException();
 
-            ResultSet resultPrefs = userPrefsStatement.executeQuery();
-            if (resultPrefs.next()) {
-                // récup 1 par 1 les préférences de l'utilisateur
-                int channel = resultPrefs.getInt("channel");
+                File traceFile = new File(errFolder, event.getPlayer().getName() + date + ".log");
+                if (!traceFile.createNewFile()) throw new IOException("Failed to create new trace file");
 
-                PreferenceCache.cache(event.getPlayer(), channel);
-            } else {
-                Bukkit.getLogger().info("Player " + event.getPlayer().getName() + " has no settings. Maybe they're a newbie?");
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(traceFile, StandardCharsets.UTF_8))){
+                    writer.append(event.getPlayer().getName()).append(" failed to get his info.");
+                    writer.append("\n");
+                    writer.append(e.getMessage() != null ? ("Exception message:\n\t" + e.getMessage()) : "No exception message given.");
+                    writer.append("\n");
+                    writer.append("Response code: ").append(String.valueOf(e.getCode())).append("\t\t(if 0, ignore it, it wasn't a HTTP error)");
+                    writer.append("\n");
+                    if (e.getResponseHeaders() != null) {
+                        writer.append("Response headers: \n");
+                        for (Map.Entry<String, List<String>> entry : e.getResponseHeaders().entrySet()) {
+                            writer.append("\t");
+                            writer.append(entry.getKey()).append(": ").append(String.join(";", entry.getValue()));
+                            writer.append("\n");
+                        }
+                    } else {
+                        writer.append("No response headers. Maybe no request was made at all?");
+                        writer.append("\n");
+                    }
+                    writer.append(e.getResponseBody() != null ? ("Response body:\n\t" + e.getMessage()) : "No body in the reponse.");
+                }
+            } catch (IOException ex) {
+                INSTANCE.getLogger().severe("Dagnabit dammit! Couldn't write a trace file...");
+                throw new RuntimeException(ex);
             }
 
-            resultPrefs.close();
-            userPrefsStatement.close();
-        } catch (SQLException e) {
-            isNotDone.remove(event.getPlayer().getUniqueId());
-            throw new RuntimeException(e);
+            event.getPlayer().kick(Component.text("Oups ! Je n'arrive pas à accéder à vos infos joueurs.").color(NamedTextColor.RED));
         }
-        user.getCachedData().invalidate();
-        String prefix = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getMetaData().getPrefix().replaceAll("&", "§");
-        event.getPlayer().displayName(Component.text(prefix + event.getPlayer().getName()));
-        event.joinMessage(event.getPlayer().displayName().append(Component.text(colorize("&7 a rejoint le serveur !"))));
-        event.getPlayer().playerListName(event.getPlayer().displayName());
-
-
-        // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
-        String playerName = event.getPlayer().getName();
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("Connexion")
-                .setDescription("**" + playerName + "** s'est connecté au serveur !")
-                .setColor(Color.decode("#00ff00"))
-                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-        );
-        webhook.execute();
-
-        isNotDone.remove(event.getPlayer().getUniqueId());
     }
-
-    public static void networkSync() {
-        LP.runUpdateTask();
-    }
-
 }
