@@ -10,8 +10,9 @@ database: true
 libraries:
   - org.mariadb.jdbc:mariadb-java-client:3.0.8
 
-depend: #Charger ECATUP APRÈS LP.
+depend: #Charger ECATUP APRÈS LP et ACP.
   - LuckPerms
+  - AnimusClient-Paper
 
 permissions:
   ecatup.channel.use:
