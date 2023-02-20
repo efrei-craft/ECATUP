@@ -11,7 +11,6 @@ import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
 import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
-import fr.efreicraft.ecatup.utils.DBConnection;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -39,7 +38,6 @@ public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
     public static FileConfiguration config;
-    public static DBConnection DB;
     public static LuckPerms LP;
 
 
@@ -54,20 +52,6 @@ public final class Main extends JavaPlugin {
         config = INSTANCE.getConfig();
         config.options().copyDefaults(true); // au cas où le fichier existe mais est incomplet.
         INSTANCE.saveConfig();
-
-        // Connect to MariaDB database
-
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            DB = new DBConnection(config.getString("database.host"),
-                    config.getInt("database.port"),
-                    config.getString("database.database"),
-                    config.getString("database.user"),
-                    config.getString("database.password"));
-            DB.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
@@ -123,23 +107,20 @@ public final class Main extends JavaPlugin {
         getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
         getServer().getMessenger().unregisterIncomingPluginChannel(INSTANCE);
 
-        // Close database connection
-        DB.close();
-
-        // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("Serveur")
-                .setDescription("Le serveur s'est arrêté !")
-                .setColor(java.awt.Color.decode("#ffffff"))
-                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-        );
         if (!config.getString("server_name", "").equalsIgnoreCase("lobby"))
             for (Player player : Bukkit.getOnlinePlayers()) {
                 sendPlayerToServer(player, "lobby");
             }
 
         try {
+            // Send log to Discord
+            DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
+            webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                    .setTitle("Serveur")
+                    .setDescription("Le serveur s'est arrêté !")
+                    .setColor(java.awt.Color.decode("#ffffff"))
+                    .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+            );
             webhook.execute();
         } catch (IOException ignored) {}
     }
