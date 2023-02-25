@@ -15,7 +15,7 @@ import java.util.*;
  * <li>modifier le Javadoc de {@link PreferenceCache#getCache()} comme dû</li>
  * <li>modifier {@link PreferenceCache#NUMBER_OF_PREFS} comme dû</li>
  */
-@SuppressWarnings("ALL") // ça ça s'appelle un fuck off.
+// TODO: REFACTOR ÇA POUR QUE CE SOIT PLUS PROPRE !
 public class PreferenceCache {
 
     private static Map<UUID, List<?>> cache = new HashMap<>();
@@ -82,7 +82,8 @@ public class PreferenceCache {
     public enum ChatChannel {
         GLOBAL(0),
         SERVER(1),
-        TEAM(2);
+        TEAM(2),
+        PARTY(3);
 
         public final int ID;
         ChatChannel(int i) {

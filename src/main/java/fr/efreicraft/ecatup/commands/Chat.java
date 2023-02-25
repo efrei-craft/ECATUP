@@ -1,6 +1,8 @@
 package fr.efreicraft.ecatup.commands;
 
+import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
+import fr.efreicraft.animus.models.UuidChannelBody;
 import fr.efreicraft.ecatup.PreferenceCache;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +43,7 @@ public class Chat implements CommandExecutor, TabExecutor {
         boolean canUseGlobal = self.hasPermission("ecatup.channel.global");
 
         if (args[0].equalsIgnoreCase("help") || args.length > 1) {
-            sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team]"));
+            sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team OR p|party]"));
             return true;
         }
 
@@ -61,10 +63,14 @@ public class Chat implements CommandExecutor, TabExecutor {
             case "t","team" -> {
                 sendChannelPrefToDB(self, PreferenceCache.ChatChannel.TEAM);
                 PreferenceCache.setPref(self, 0, PreferenceCache.ChatChannel.TEAM);
-
                 sender.sendMessage(colorize("&aVous basculez sur le canal &e[TEAM]"));
             }
-            default -> sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team]"));
+            case "p","party" -> {
+                sendChannelPrefToDB(self, PreferenceCache.ChatChannel.PARTY);
+                PreferenceCache.setPref(self, 0, PreferenceCache.ChatChannel.PARTY);
+                sender.sendMessage(colorize("&aVous basculez sur le canal &e[PARTY]"));
+            }
+            default -> sender.sendMessage(colorize("&c&lUsage: &r&c/chat [" + (canUseGlobal ? "g|global OR " : "") + "s|server|normal OR t|team OR p|party]"));
         }
 
         return true;
@@ -72,10 +78,9 @@ public class Chat implements CommandExecutor, TabExecutor {
 
     public void sendChannelPrefToDB(Player player, PreferenceCache.ChatChannel channel) {
         try {
-            //TODO bien sur supprimer ça quand la fonction pour update le channel sera prête
-            throw new ApiException();
+            PlayerService.changePlayerChannel(player.getUniqueId().toString(), UuidChannelBody.ChannelEnum.valueOf(channel.toString()));
         } catch (ApiException e) {
-
+            player.sendMessage(colorize("&cErreur : ce changement n'a pas été enregistré."));
         }
     }
 
