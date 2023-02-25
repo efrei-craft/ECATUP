@@ -24,7 +24,6 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4'
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
     compileOnly files("../AnimusClient-Paper/AnimusClient/swagger/")
-    compileOnly "fr.efreicraft:animusclient-paper"
     compileOnly "fr.efreicraft:AnimusClient"
 }
 
