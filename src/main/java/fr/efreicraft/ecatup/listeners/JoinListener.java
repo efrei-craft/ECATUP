@@ -20,9 +20,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static fr.efreicraft.ecatup.Main.INSTANCE;
+import static fr.efreicraft.ecatup.ECATUP.INSTANCE;
 
-public class Join implements Listener {
+public class JoinListener implements Listener {
 
     @EventHandler
     public static void onJoin(PlayerJoinEvent event) {

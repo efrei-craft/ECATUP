@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.listeners;
 
-import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.PreferenceCache;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
@@ -12,13 +12,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.awt.*;
 import java.io.IOException;
 
-public class Quit implements Listener {
+public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) throws IOException {
         event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
+        DiscordWebhook webhook = new DiscordWebhook(ECATUP.config.getString("webhook"));
         String playerName = event.getPlayer().getName();
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
                 .setTitle("Déconnexion")

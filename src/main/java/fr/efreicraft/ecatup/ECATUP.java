@@ -7,9 +7,9 @@ import fr.efreicraft.ecatup.commands.gamemode.*;
 import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
 import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
 import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
-import fr.efreicraft.ecatup.listeners.Chat;
-import fr.efreicraft.ecatup.listeners.Join;
-import fr.efreicraft.ecatup.listeners.Quit;
+import fr.efreicraft.ecatup.listeners.ChatListener;
+import fr.efreicraft.ecatup.listeners.JoinListener;
+import fr.efreicraft.ecatup.listeners.QuitListener;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -31,7 +31,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class Main extends JavaPlugin {
+public final class ECATUP extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
     public static FileConfiguration config;
@@ -50,12 +50,12 @@ public final class Main extends JavaPlugin {
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
-        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new Chat());
+        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new ChatListener());
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new Join(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new QuitListener(), INSTANCE);
 
         // Register commands
         if (!config.getString("server_name", "").equals("lobby")) {

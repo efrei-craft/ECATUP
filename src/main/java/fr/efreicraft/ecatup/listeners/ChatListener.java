@@ -2,7 +2,7 @@ package fr.efreicraft.ecatup.listeners;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.PreferenceCache;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -12,7 +12,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
 @SuppressWarnings("ALL")
-public class Chat implements Listener, PluginMessageListener {
+public class ChatListener implements Listener, PluginMessageListener {
 
 
     @Override
@@ -86,7 +85,7 @@ public class Chat implements Listener, PluginMessageListener {
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
+        DiscordWebhook webhook = new DiscordWebhook(ECATUP.config.getString("webhook"));
         String name = event.getPlayer().getName();
         String message = ((TextComponent)event.message()).content();
         webhook.setContent("");
@@ -99,7 +98,7 @@ public class Chat implements Listener, PluginMessageListener {
         webhook.execute();
         switch (channelActuel) {
             case GLOBAL -> {
-                Main.sendGlobalChat(msgGlobal.toString(), event.getPlayer());
+                ECATUP.sendGlobalChat(msgGlobal.toString(), event.getPlayer());
                 Bukkit.broadcast(Component.join(JoinConfiguration.noSeparators(),channelPrefix,msg
                         .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT))));
             }

@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.commands;
 
-import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.ECATUP;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,6 +39,6 @@ public class Skull implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return args.length == 1 ? Main.getPlayersForTabList(args, 0) : null;
+        return args.length == 1 ? ECATUP.getPlayersForTabList(args, 0) : null;
     }
 }

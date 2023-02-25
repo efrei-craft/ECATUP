@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.commands;
 
-import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.ecatup.ECATUP;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +14,7 @@ public class Lobby implements CommandExecutor {
         if (args.length > 0) return false;
 
         if (sender instanceof Player player) {
-            Main.sendPlayerToServer(player, "lobby");
+            ECATUP.sendPlayerToServer(player, "lobby");
         }
         else {
             sender.sendMessage(ChatColor.RED + "Vous devez être un joueur pour exécuter cette commande !");
