@@ -9,13 +9,10 @@ import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
 import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
 import fr.efreicraft.ecatup.listeners.Chat;
 import fr.efreicraft.ecatup.listeners.Join;
-import fr.efreicraft.ecatup.listeners.LuckPermsListener;
 import fr.efreicraft.ecatup.listeners.Quit;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -38,19 +35,17 @@ public final class Main extends JavaPlugin {
 
     public static JavaPlugin INSTANCE;
     public static FileConfiguration config;
-    public static LuckPerms LP;
 
 
     @Override
     public void onEnable() {
 
         INSTANCE = this;
-        LP = LuckPermsProvider.get();
 
         // Load config
         saveDefaultConfig();
         config = INSTANCE.getConfig();
-        config.options().copyDefaults(true); // au cas où le fichier existe mais est incomplet.
+        config.options().copyDefaults(true); // au cas où le fichier existe, mais est incomplet.
         INSTANCE.saveConfig();
 
         // Register BungeeCord channel
@@ -61,7 +56,6 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new Join(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
 
         // Register commands
         if (!config.getString("server_name", "").equals("lobby")) {
@@ -121,8 +115,8 @@ public final class Main extends JavaPlugin {
                     .setColor(java.awt.Color.decode("#ffffff"))
                     .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
             );
-            webhook.execute();
-        } catch (IOException ignored) {}
+//            webhook.execute();
+        } catch (Throwable ignored) {}
     }
 
     void registerCommand(String command, CommandExecutor executor) {
@@ -133,7 +127,6 @@ public final class Main extends JavaPlugin {
         List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argPos].toLowerCase())).collect(Collectors.toList());
         List<String> results = new ArrayList<>();
         players.forEach(player -> results.add(player.getName()));
-        players.clear(); // get rid of some space & memory
         return results.isEmpty() ? null : results;
     }
 

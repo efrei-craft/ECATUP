@@ -58,13 +58,12 @@ public class Chat implements Listener, PluginMessageListener {
         Bukkit.broadcast(component);
     }
 
-    LuckPerms LP = Main.LP;
-
     @EventHandler
     public void onChat(AsyncChatEvent event) throws IOException {
         event.setCancelled(true);
 
-        boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
+        //TODO fix ça en obtenant ecatup.chat.color
+        boolean coloriseText = false;
 
         PreferenceCache.ChatChannel channelActuel = PreferenceCache.getChannel(event.getPlayer().getUniqueId());
 

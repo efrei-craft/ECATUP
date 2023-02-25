@@ -1,8 +1,7 @@
 package fr.efreicraft.ecatup.commands;
 
-import fr.efreicraft.ecatup.Main;
+import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.ecatup.PreferenceCache;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,9 +10,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -76,25 +72,10 @@ public class Chat implements CommandExecutor, TabExecutor {
 
     public void sendChannelPrefToDB(Player player, PreferenceCache.ChatChannel channel) {
         try {
-            PreparedStatement verifyIfHasEntry = Main.DB.openThenGetConnection().prepareStatement("SELECT * FROM `usersPrefs` WHERE mcUUID=?");
-            verifyIfHasEntry.setString(1, player.getUniqueId().toString());
-            ResultSet result1 = verifyIfHasEntry.executeQuery();
-            boolean hasEntryInDB = result1.next();
+            //TODO bien sur supprimer ça quand la fonction pour update le channel sera prête
+            throw new ApiException();
+        } catch (ApiException e) {
 
-            verifyIfHasEntry.close();
-            result1.close();
-
-            PreparedStatement applyChanges = Main.DB.openThenGetConnection().prepareStatement(hasEntryInDB ? "UPDATE `usersPrefs` SET channel=? WHERE mcUUID=?"
-                    : "INSERT INTO `usersPrefs` (channel, mcUUID) VALUES(?,?)");
-
-            applyChanges.setInt(1, channel.ID);
-            applyChanges.setString(2, player.getUniqueId().toString());
-            applyChanges.executeQuery();
-
-            applyChanges.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Bukkit.getLogger().severe("Couldn't save " + player.getName() + "'s new preference! Is the database okay?");
         }
     }
 
@@ -102,10 +83,8 @@ public class Chat implements CommandExecutor, TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length != 1) return Collections.emptyList();
 
-        List<String> result = Arrays.stream(PreferenceCache.ChatChannel.values())
+        return Arrays.stream(PreferenceCache.ChatChannel.values())
                 .filter(channel -> channel.toString().startsWith(args[0].toUpperCase()))
                 .filter(channel -> sender.hasPermission("ecatup.channel.global") || channel != PreferenceCache.ChatChannel.GLOBAL).map(Enum::toString).collect(Collectors.toList());
-
-        return result;
     }
 }
