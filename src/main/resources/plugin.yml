@@ -1,6 +1,6 @@
 name: ECATUP
 version: '${version}'
-main: fr.efreicraft.ecatup.Main
+main: fr.efreicraft.ecatup.ECATUP
 prefix: ECATUP
 api-version: 1.19
 authors: [ Niilyx, DocSystem ]
