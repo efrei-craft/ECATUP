@@ -17,12 +17,22 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        url = 'https://ci.mg-dev.eu/plugin/repository/everything'
+        content {
+            includeGroup 'com.bergerkiller.bukkit'
+            includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
+            includeGroup 'com.bergerkiller.mountiplex'
+        }
+    }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+
+    compileOnly 'com.bergerkiller.bukkit:BKCommonLib:1.19.3-v2'
+
     compileOnly files("../AnimusClient/swagger/code/")
     compileOnly "fr.efreicraft:AnimusClient"
 }

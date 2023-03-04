@@ -7,6 +7,7 @@ import fr.efreicraft.ecatup.commands.gamemode.*;
 import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
 import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
 import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
+import fr.efreicraft.ecatup.groups.GroupManager;
 import fr.efreicraft.ecatup.listeners.ChatListener;
 import fr.efreicraft.ecatup.listeners.JoinListener;
 import fr.efreicraft.ecatup.listeners.QuitListener;
@@ -39,6 +40,8 @@ public final class ECATUP extends JavaPlugin {
     private FileConfiguration config;
 
     private PlayerManager playerManager;
+
+    private GroupManager groupManager;
 
     @Override
     public void onEnable() {
@@ -91,6 +94,8 @@ public final class ECATUP extends JavaPlugin {
         } catch (IOException ignored) {}
 
         playerManager = new PlayerManager();
+
+        groupManager = new GroupManager();
     }
 
     @Override
@@ -180,5 +185,9 @@ public final class ECATUP extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public GroupManager getGroupManager() {
+        return groupManager;
     }
 }

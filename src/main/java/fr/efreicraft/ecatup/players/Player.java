@@ -2,6 +2,8 @@ package fr.efreicraft.ecatup.players;
 
 import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
+import fr.efreicraft.ecatup.ECATUP;
+import fr.efreicraft.ecatup.groups.GroupManager;
 import fr.efreicraft.ecatup.players.menus.PlayerMenus;
 import fr.efreicraft.ecatup.players.scoreboards.PlayerScoreboard;
 import fr.efreicraft.ecatup.utils.MessageUtils;
@@ -9,6 +11,10 @@ import fr.efreicraft.ecatup.utils.SoundUtils;
 import fr.efreicraft.ecatup.utils.TitleUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.permissions.PermissionAttachment;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * Joueur des mini-jeux.
@@ -43,6 +49,10 @@ public class Player {
         this.playerMenus = new PlayerMenus();
         this.scoreboard = new PlayerScoreboard(this);
         this.animusPlayer = PlayerService.getPlayer(String.valueOf(playerEntity.getUniqueId()));
+
+        ECATUP.getInstance().getGroupManager().addPlayerToTeam(this);
+
+        addPlayerPermissions();
     }
 
     /**
@@ -148,5 +158,18 @@ public class Player {
         entity().setFlySpeed(0.1f);
         entity().getInventory().clear();
         entity().getInventory().setArmorContents(null);
+    }
+
+    public void addPlayerPermissions() {
+        try {
+            List<String> permissions = PlayerService.getPermissionOfPlayer(String.valueOf(playerEntity.getUniqueId()));
+            PermissionAttachment attachment = playerEntity.addAttachment(ECATUP.getInstance());
+            for (String permission : permissions) {
+                attachment.setPermission(permission, true);
+                System.out.println(permission + " assigned to player " + playerEntity.getName());
+            }
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
