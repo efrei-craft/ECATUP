@@ -78,7 +78,7 @@ public class Chat implements CommandExecutor, TabExecutor {
 
     public void sendChannelPrefToDB(Player player, PreferenceCache.ChatChannel channel) {
         try {
-            PlayerService.changePlayerChannel(player.getUniqueId().toString(), UuidChannelBody.ChannelEnum.valueOf(channel.toString()));
+            PlayerService.changePlayerChatChannel(player.getUniqueId().toString(), UuidChannelBody.ChannelEnum.valueOf(channel.toString()));
         } catch (ApiException e) {
             player.sendMessage(colorize("&cErreur : ce changement n'a pas été enregistré."));
         }

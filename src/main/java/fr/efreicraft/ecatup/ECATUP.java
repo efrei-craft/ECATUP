@@ -10,6 +10,7 @@ import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
 import fr.efreicraft.ecatup.listeners.ChatListener;
 import fr.efreicraft.ecatup.listeners.JoinListener;
 import fr.efreicraft.ecatup.listeners.QuitListener;
+import fr.efreicraft.ecatup.players.PlayerManager;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -33,9 +34,11 @@ import java.util.stream.Collectors;
 @SuppressWarnings("UnstableApiUsage")
 public final class ECATUP extends JavaPlugin {
 
-    public static JavaPlugin INSTANCE;
-    public static FileConfiguration config;
+    private static ECATUP INSTANCE;
 
+    private FileConfiguration config;
+
+    private PlayerManager playerManager;
 
     @Override
     public void onEnable() {
@@ -56,11 +59,6 @@ public final class ECATUP extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChatListener(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new QuitListener(), INSTANCE);
-
-        // Register commands
-        if (!config.getString("server_name", "").equals("lobby")) {
-            registerCommand("lobby", new Lobby()); // Only register /lobby if the server's name is "lobby"
-        }
 
         registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
         for (PreferenceCache.ChatChannel channel : PreferenceCache.ChatChannel.values()) {
@@ -91,6 +89,8 @@ public final class ECATUP extends JavaPlugin {
         try {
             webhook.execute();
         } catch (IOException ignored) {}
+
+        playerManager = new PlayerManager();
     }
 
     @Override
@@ -172,5 +172,13 @@ public final class ECATUP extends JavaPlugin {
         out.write(msgbytes.toByteArray());
 
         Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
+    }
+
+    public static ECATUP getInstance() {
+        return INSTANCE;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 }

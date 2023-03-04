@@ -85,7 +85,7 @@ public class ChatListener implements Listener, PluginMessageListener {
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(ECATUP.config.getString("webhook"));
+        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
         String name = event.getPlayer().getName();
         String message = ((TextComponent)event.message()).content();
         webhook.setContent("");

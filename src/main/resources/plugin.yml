@@ -7,11 +7,8 @@ authors: [ Niilyx, DocSystem ]
 description: Les commandes et fonctions utiles d'Efrei Craft
 website: https://github.com/efrei-craft/ECATUP
 database: true
-libraries:
-  - org.mariadb.jdbc:mariadb-java-client:3.0.8
 
 depend: #Charger ECATUP APRÈS LP et ACP.
-  - LuckPerms
   - AnimusClient-Paper
 
 permissions:

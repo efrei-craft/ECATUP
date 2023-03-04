@@ -62,3 +62,7 @@ task move(type: Copy) {
     from "${buildDir}\\libs\\" + rootProject.name + "-" + version + ".jar"
     into "SERVER_TEST/plugins/"
 }
+
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
+}

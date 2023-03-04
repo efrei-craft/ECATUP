@@ -18,7 +18,7 @@ public class QuitListener implements Listener {
         event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(ECATUP.config.getString("webhook"));
+        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
         String playerName = event.getPlayer().getName();
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
                 .setTitle("Déconnexion")
