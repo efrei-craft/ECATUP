@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.players.scoreboards.interfaces;
 
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 
 /**
  * Interface fonctionnelle pour les lambda de récupération de valeur de scoreboard dynamique.
@@ -17,6 +17,6 @@ public interface IDynamicScoreboardFieldValue {
      * @return La chaîne de caractère de valeur du field.
      * La coloration se fait avec les {@link net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer#legacyAmpersand()}.
      */
-    String value(Player player);
+    String value(ECPlayer player);
 
 }

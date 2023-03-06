@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.players.menus;
 
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.players.menus.interfaces.Menu;
 import fr.efreicraft.ecatup.players.menus.interfaces.MenuItem;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +27,7 @@ public class PlayerInventoryMenu extends Menu {
      * @param player Le joueur concerné par le menu.
      * @param items Les items à afficher dans le menu.
      */
-    public PlayerInventoryMenu(Player player, List<MenuItem> items) {
+    public PlayerInventoryMenu(ECPlayer player, List<MenuItem> items) {
         super(player, null, items);
     }
 

@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.players.menus.interfaces;
 
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import net.kyori.adventure.text.Component;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public abstract class Menu {
     /**
      * Le joueur concerné par le menu.
      */
-    protected Player player;
+    protected ECPlayer player;
 
     /**
      * Le titre du menu.
@@ -31,7 +31,7 @@ public abstract class Menu {
      */
     protected List<MenuItem> items;
 
-    protected Menu(Player player, Component menuName, List<MenuItem> items) {
+    protected Menu(ECPlayer player, Component menuName, List<MenuItem> items) {
         this.player = player;
         this.menuName = menuName;
         this.items = items;

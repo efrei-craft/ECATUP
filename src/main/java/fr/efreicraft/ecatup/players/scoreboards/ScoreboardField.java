@@ -1,6 +1,6 @@
 package fr.efreicraft.ecatup.players.scoreboards;
 
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.players.scoreboards.interfaces.IDynamicScoreboardFieldValue;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -28,7 +28,7 @@ public class ScoreboardField {
 
     private final boolean oneLine;
 
-    private Player player; // Only used for dynamic values
+    private ECPlayer player; // Only used for dynamic values
 
     /**
      * Constructeur d'un field de scoreboard statique.
@@ -111,7 +111,7 @@ public class ScoreboardField {
      * Change le joueur du field.
      * @param player Nouveau joueur du field.
      */
-    public void setPlayer(Player player) {
+    public void setPlayer(ECPlayer player) {
         this.player = player;
     }
 

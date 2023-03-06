@@ -1,11 +1,10 @@
 package fr.efreicraft.ecatup.utils;
 
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -51,7 +50,7 @@ public class TitleUtils {
      * @param stay      Temps d'affichage du title en secondes.
      * @param fadeOut   Temps de disparition du title en secondes.
      */
-    public static void sendTitle(Player player, String title, String subtitle, float fadeIn, float stay, float fadeOut) {
+    public static void sendTitle(ECPlayer player, String title, String subtitle, float fadeIn, float stay, float fadeOut) {
         player.entity().showTitle(buildTitle(title, subtitle, fadeIn, stay, fadeOut));
     }
 
@@ -64,7 +63,7 @@ public class TitleUtils {
      * @param fadeOut   Temps de disparition du title en secondes.
      */
     public static void broadcastTitle(String title, String subtitle, float fadeIn, float stay, float fadeOut) {
-        for(Player player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
+        for(ECPlayer player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
             sendTitle(player, title, subtitle, fadeIn, stay, fadeOut);
         }
     }

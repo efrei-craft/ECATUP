@@ -2,7 +2,6 @@ package fr.efreicraft.ecatup.players;
 
 import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
-import fr.efreicraft.animus.models.PermGroup;
 import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.menus.PlayerMenus;
@@ -26,7 +25,7 @@ import java.util.List;
  *
  * @author Antoine B. {@literal <antoine@jiveoff.fr>}
  */
-public class Player {
+public class ECPlayer {
 
     /**
      * Instance du joueur Bukkit.
@@ -49,7 +48,7 @@ public class Player {
      * Constructeur du joueur.
      * @param playerEntity Instance du joueur Bukkit.
      */
-    public Player(org.bukkit.entity.Player playerEntity) throws ApiException {
+    public ECPlayer(org.bukkit.entity.Player playerEntity) throws ApiException {
         this.playerEntity = playerEntity;
         this.playerMenus = new PlayerMenus();
         this.scoreboard = new PlayerScoreboard(this);

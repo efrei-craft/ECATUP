@@ -1,7 +1,7 @@
 package fr.efreicraft.ecatup.players.menus;
 
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.players.menus.interfaces.Menu;
 import fr.efreicraft.ecatup.players.menus.interfaces.MenuItem;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -39,7 +39,7 @@ public class ChestMenu extends Menu {
      * @param size     La taille du coffre à ouvrir.
      * @param items    Les items à afficher dans le menu.
      */
-    public ChestMenu(Player player, String menuName, int size, List<MenuItem> items) {
+    public ChestMenu(ECPlayer player, String menuName, int size, List<MenuItem> items) {
         super(
                 player,
                 LegacyComponentSerializer.legacyAmpersand().deserialize(menuName),

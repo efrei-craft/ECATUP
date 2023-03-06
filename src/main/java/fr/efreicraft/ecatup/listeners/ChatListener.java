@@ -3,28 +3,20 @@ package fr.efreicraft.ecatup.listeners;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.PreferenceCache;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.utils.MessageUtils;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -62,7 +54,7 @@ public class ChatListener implements Listener, PluginMessageListener {
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         event.setCancelled(true);
-        fr.efreicraft.ecatup.players.Player player = ECATUP.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        ECPlayer player = ECATUP.getInstance().getPlayerManager().getPlayer(event.getPlayer());
         MessageUtils.broadcastMessage(player.getChatName() + "&8: &f" + LegacyComponentSerializer.legacyAmpersand().serialize(event.message()));
     }
 

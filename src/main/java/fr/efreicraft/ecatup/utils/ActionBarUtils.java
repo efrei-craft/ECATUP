@@ -1,7 +1,7 @@
 package fr.efreicraft.ecatup.utils;
 
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
@@ -22,7 +22,7 @@ public class ActionBarUtils {
      * @param player le joueur qui va recevoir action bar
      * @param message le message envoyé au joueur
      */
-    public static void sendActionBar(Player player, String message){
+    public static void sendActionBar(ECPlayer player, String message){
         player.entity().sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
     }
 
@@ -31,7 +31,7 @@ public class ActionBarUtils {
      * @param message le message qui va être envoyé
      */
     public static void broadcastActionBar(String message){
-        for(Player player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
+        for(ECPlayer player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
             sendActionBar(player, message);
         }
     }

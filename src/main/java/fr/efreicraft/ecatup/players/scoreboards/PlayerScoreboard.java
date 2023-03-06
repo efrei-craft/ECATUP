@@ -1,7 +1,7 @@
 package fr.efreicraft.ecatup.players.scoreboards;
 
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.utils.StringAnimationUtils;
 import fr.efreicraft.ecatup.utils.fastboard.FastBoard;
 import net.kyori.adventure.text.TextComponent;
@@ -29,7 +29,7 @@ public class PlayerScoreboard {
     /**
      * Joueur auquel est lié le scoreboard.
      */
-    private final Player player;
+    private final ECPlayer player;
 
     /**
      * Instance {@link FastBoard} pour le contrôle du scoreboard.
@@ -79,7 +79,7 @@ public class PlayerScoreboard {
      * Constructeur du scoreboard. Celui-ci déclare un timer asynchrone pour la mise à jour tous les 2 ticks serveur.
      * @param player Joueur auquel est lié le scoreboard.
      */
-    public PlayerScoreboard(Player player) {
+    public PlayerScoreboard(ECPlayer player) {
         this.player = player;
         this.setVisibility(true);
         this.fields = new TreeMap<>();

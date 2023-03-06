@@ -5,7 +5,7 @@ import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.animus.models.PermGroup;
 import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.players.Player;
+import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -42,7 +42,7 @@ public class GroupManager {
             team.setAllowFriendlyFire(false);
         }
 
-        for(Player player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
+        for(ECPlayer player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
             addPlayerToTeam(player);
         }
     }
@@ -62,7 +62,7 @@ public class GroupManager {
         }
     }
 
-    public void addPlayerToTeam(Player player) {
+    public void addPlayerToTeam(ECPlayer player) {
         PermGroupPlayer group = player.getAnimusPlayer().getPermGroups().get(0);
         Character priority = (char) ('a' + group.getPriority().intValue());
         String teamName = priority + group.getName();

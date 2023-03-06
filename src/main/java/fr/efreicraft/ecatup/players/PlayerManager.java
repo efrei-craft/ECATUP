@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class PlayerManager {
 
-    private final Set<Player> players;
+    private final Set<ECPlayer> players;
 
     /**
      * Constructeur du gestionnaire de joueurs. Il initialise la liste des joueurs aux joueurs connectés actuellement.
@@ -29,7 +29,7 @@ public class PlayerManager {
      * Ajoute un joueur à la liste des joueurs.
      * @param p Joueur à ajouter
      */
-    public void addPlayer(Player p) {
+    public void addPlayer(ECPlayer p) {
         this.players.add(p);
 
         ECPlayerJoined event = new ECPlayerJoined(p);
@@ -40,7 +40,7 @@ public class PlayerManager {
      * Supprime un joueur de la liste des joueurs. Déclenche également la vérification pour voir si le jeu doit être arrêté.
      * @param player Joueur à supprimer
      */
-    public void removePlayer(Player player) {
+    public void removePlayer(ECPlayer player) {
         player.unload();
         this.players.remove(player);
     }
@@ -59,8 +59,8 @@ public class PlayerManager {
      * @param player Entité du joueur
      * @return Liste des joueurs
      */
-    public Player getPlayer(org.bukkit.entity.Player player) {
-        for (Player p : this.players) {
+    public ECPlayer getPlayer(org.bukkit.entity.Player player) {
+        for (ECPlayer p : this.players) {
             if(p.entity().equals(player)) {
                 return p;
             }
@@ -72,7 +72,7 @@ public class PlayerManager {
      * Retourne tous les joueurs.
      * @return Liste des joueurs
      */
-    public Set<Player> getPlayers() {
+    public Set<ECPlayer> getPlayers() {
         return players;
     }
 
