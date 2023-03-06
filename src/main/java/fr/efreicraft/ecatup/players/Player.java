@@ -9,11 +9,16 @@ import fr.efreicraft.ecatup.players.scoreboards.PlayerScoreboard;
 import fr.efreicraft.ecatup.utils.MessageUtils;
 import fr.efreicraft.ecatup.utils.SoundUtils;
 import fr.efreicraft.ecatup.utils.TitleUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -160,14 +165,45 @@ public class Player {
         entity().getInventory().setArmorContents(null);
     }
 
+    private List<String> getWildcardPermissions(String permission) {
+        List<String> permissions = new ArrayList<>();
+
+        if(permission.equals("minecraft.command.*")) {
+            for (HelpTopic helpTopic : Bukkit.getServer().getHelpMap().getHelpTopics()) {
+                if(helpTopic.getName().startsWith("/")) {
+                    permissions.add("minecraft.command." + helpTopic.getName().substring(1));
+                }
+            }
+        } else {
+            for (Plugin pl : Bukkit.getPluginManager().getPlugins()) {
+                for (Permission inner_perm : pl.getDescription().getPermissions()) {
+                    if(inner_perm.getName().startsWith(permission.substring(0, permission.length() - 1))) {
+                        permissions.add(inner_perm.getName());
+                    }
+                }
+            }
+        }
+
+        return permissions;
+    }
+
     public void addPlayerPermissions() {
         try {
             List<String> permissions = PlayerService.getPermissionOfPlayer(String.valueOf(playerEntity.getUniqueId()));
             PermissionAttachment attachment = playerEntity.addAttachment(ECATUP.getInstance());
             for (String permission : permissions) {
-                attachment.setPermission(permission, true);
-                System.out.println(permission + " assigned to player " + playerEntity.getName());
+                if(permission.endsWith(".*")) {
+                    List<String> wildcardPermissions = getWildcardPermissions(permission);
+                    for (String wildcardPermission : wildcardPermissions) {
+                        attachment.setPermission(wildcardPermission, true);
+                        System.out.println("Wilcard " + wildcardPermission + " assigned to player " + playerEntity.getName());
+                    }
+                } else {
+                    attachment.setPermission(permission, true);
+                    System.out.println(permission + " assigned to player " + playerEntity.getName());
+                }
             }
+            playerEntity.updateCommands();
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }

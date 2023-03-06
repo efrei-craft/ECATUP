@@ -43,7 +43,7 @@ commands:
   lobby:
     description: Teleport to the lobby
     usage: /lobby
-    aliases: [hub, spawn]
+    aliases: [ hub, spawn ]
     permission: ecatup.lobby
   chat:
     description: Change chat channel
@@ -94,7 +94,8 @@ commands:
     description: Slaps the shit outta someone
     aliases:
       - bitchslap
-    permission: /slap <player> [-a]
+    usage: /slap <player> [-a]
+    permission: ecatup.slap
   sudo:
     description: Makes someone say something or execute a command
     usage: /sudo <player> <something>
