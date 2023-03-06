@@ -1,6 +1,8 @@
 package fr.efreicraft.ecatup.listeners;
 
+import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
+import fr.efreicraft.animus.models.Player;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.ECPlayer;
 import org.bukkit.event.EventHandler;
@@ -13,8 +15,12 @@ public class JoinListener implements Listener {
     public static void onJoin(PlayerJoinEvent event) {
         event.joinMessage(null);
         try {
-            ECATUP.getInstance().getPlayerManager().addPlayer(new ECPlayer(event.getPlayer()));
-        } catch (ApiException e) {
+            final Player animusPlayer = PlayerService.getPlayer(event.getPlayer().getUniqueId().toString());
+
+            ECPlayer ecPlayer = new ECPlayer(event.getPlayer(), animusPlayer);
+
+            ECATUP.getInstance().getPlayerManager().addPlayer(ecPlayer);
+        } catch (ApiException | RuntimeException e) {
             event.getPlayer().kick();
         }
     }
