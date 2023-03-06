@@ -117,6 +117,16 @@ public class MessageUtils {
     }
 
     /**
+     * Envoyer un message à un joueur.
+     * @param player Joueur.
+     * @param prefix Préfixe du message.
+     * @param message Message (coloration par esperluette).
+     */
+    public static void sendMessage(CommandSender player, String message) {
+        sendMessage(new CommandSender[]{player}, ChatPrefix.EMPTY, message);
+    }
+
+    /**
      * Envoyer un message à tous les joueurs.
      * @param prefix Préfixe du message.
      * @param message Message (coloration par esperluette).

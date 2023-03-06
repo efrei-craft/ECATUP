@@ -33,14 +33,17 @@ public class GroupManager {
             team.prefix(Component.text()
                     .append(
                             LegacyComponentSerializer.legacyAmpersand().deserialize(
-                                    group.getPrefix() + group.getName()
+                                    group.getPrefix()
                             )
                     )
-                    .append(Component.text(" "))
                     .build());
 
             team.color(ColorUtils.getTeamColorSetFromCode(group.getColor()).textColor());
             team.setAllowFriendlyFire(false);
+        }
+
+        for(Player player : ECATUP.getInstance().getPlayerManager().getPlayers()) {
+            addPlayerToTeam(player);
         }
     }
 

@@ -2,6 +2,8 @@ package fr.efreicraft.ecatup.players;
 
 import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
+import fr.efreicraft.animus.models.PermGroup;
+import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.menus.PlayerMenus;
 import fr.efreicraft.ecatup.players.scoreboards.PlayerScoreboard;
@@ -143,6 +145,14 @@ public class Player {
     }
 
     /**
+     * Retourne le nom du joueur coloré avec son rang.
+     */
+    public String getChatName() {
+        PermGroupPlayer group = this.animusPlayer.getPermGroups().get(0);
+        return group.getPrefix() + "&r" + group.getColor() + this.playerEntity.getName();
+    }
+
+    /**
      * Remets le joueur à un état de jeu normal.
      */
     public void resetPlayer() {
@@ -197,7 +207,6 @@ public class Player {
                     }
                 } else {
                     attachment.setPermission(permission, true);
-                    System.out.println(permission + " assigned to player " + playerEntity.getName());
                 }
             }
             playerEntity.updateCommands();
