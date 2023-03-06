@@ -3,7 +3,6 @@ package fr.efreicraft.ecatup.players;
 import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.ecatup.ECATUP;
-import fr.efreicraft.ecatup.groups.GroupManager;
 import fr.efreicraft.ecatup.players.menus.PlayerMenus;
 import fr.efreicraft.ecatup.players.scoreboards.PlayerScoreboard;
 import fr.efreicraft.ecatup.utils.MessageUtils;
@@ -17,7 +16,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,14 +187,13 @@ public class Player {
 
     public void addPlayerPermissions() {
         try {
-            List<String> permissions = PlayerService.getPermissionOfPlayer(String.valueOf(playerEntity.getUniqueId()));
+            List<String> permissions = PlayerService.getPermissionsOfPlayerTemplate(String.valueOf(playerEntity.getUniqueId()));
             PermissionAttachment attachment = playerEntity.addAttachment(ECATUP.getInstance());
             for (String permission : permissions) {
                 if(permission.endsWith(".*")) {
                     List<String> wildcardPermissions = getWildcardPermissions(permission);
                     for (String wildcardPermission : wildcardPermissions) {
                         attachment.setPermission(wildcardPermission, true);
-                        System.out.println("Wilcard " + wildcardPermission + " assigned to player " + playerEntity.getName());
                     }
                 } else {
                     attachment.setPermission(permission, true);
