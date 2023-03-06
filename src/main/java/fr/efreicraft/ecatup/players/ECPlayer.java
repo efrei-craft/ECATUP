@@ -60,7 +60,7 @@ public class ECPlayer {
     }
 
     /**
-     * S'occupe de désinstancer les dépendances pour la destruction du joueur.
+     * S'occupe de désinstancier les dépendances pour la destruction du joueur.
      */
     public void unload() {
         this.scoreboard.unload();
