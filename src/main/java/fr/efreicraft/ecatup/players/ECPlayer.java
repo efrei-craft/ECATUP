@@ -19,6 +19,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Joueur des mini-jeux.
@@ -34,6 +35,8 @@ public class ECPlayer {
 
     private final fr.efreicraft.animus.models.Player animusPlayer;
 
+    private String prefix = "";
+
     /**
      * Instance du scoreboard du joueur.
      */
@@ -45,14 +48,21 @@ public class ECPlayer {
     private final PlayerMenus playerMenus;
 
     /**
+     * Instance de gestionnaire de permissions du joueur.
+     */
+    private PermissionAttachment attachment;
+
+    /**
      * Constructeur du joueur.
      * @param playerEntity Instance du joueur Bukkit.
      */
-    public ECPlayer(org.bukkit.entity.Player playerEntity) throws ApiException {
+    public ECPlayer(org.bukkit.entity.Player playerEntity, fr.efreicraft.animus.models.Player animusPlayer) throws ApiException {
         this.playerEntity = playerEntity;
         this.playerMenus = new PlayerMenus();
+        this.attachment = playerEntity.addAttachment(ECATUP.getInstance());
         this.scoreboard = new PlayerScoreboard(this);
-        this.animusPlayer = PlayerService.getPlayer(String.valueOf(playerEntity.getUniqueId()));
+        this.animusPlayer = animusPlayer;
+        this.setPrefix(this.animusPlayer.getPermGroups().get(0).getPrefix());
 
         ECATUP.getInstance().getGroupManager().addPlayerToTeam(this);
 
@@ -89,6 +99,21 @@ public class ECPlayer {
      */
     public fr.efreicraft.animus.models.Player getAnimusPlayer() {
         return animusPlayer;
+    }
+
+    /**
+     * Retourne le préfixe du joueur, pour le chat.
+     * @return Préfixe du joueur
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * Configure le préfixe du joueur.
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     /**
@@ -148,7 +173,7 @@ public class ECPlayer {
      */
     public String getChatName() {
         PermGroupPlayer group = this.animusPlayer.getPermGroups().get(0);
-        return group.getPrefix() + "&r" + group.getColor() + this.playerEntity.getName();
+        return prefix + "&r" + group.getColor() + this.playerEntity.getName();
     }
 
     /**
@@ -196,8 +221,7 @@ public class ECPlayer {
 
     public void addPlayerPermissions() {
         try {
-            List<String> permissions = PlayerService.getPermissionsOfPlayerTemplate(String.valueOf(playerEntity.getUniqueId()));
-            PermissionAttachment attachment = playerEntity.addAttachment(ECATUP.getInstance());
+            List<String> permissions = PlayerService.getPlayerPermsInServerType(playerEntity.getUniqueId().toString());
             for (String permission : permissions) {
                 if(permission.endsWith(".*")) {
                     List<String> wildcardPermissions = getWildcardPermissions(permission);
@@ -212,5 +236,18 @@ public class ECPlayer {
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void updatePermissions(Map<String, Boolean> changes) {
+        for (Map.Entry<String, Boolean> permission : changes.entrySet()) {
+            attachment.setPermission(permission.getKey(), permission.getValue().booleanValue());
+        }
+    }
+    public void updatePermission(String changed, boolean newValue) {
+        attachment.setPermission(changed, newValue);
+    }
+
+    public void invalidateAllPermissions() {
+        attachment.getPermissions().keySet().forEach(attachment::unsetPermission);
     }
 }
