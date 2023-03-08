@@ -67,7 +67,7 @@ processResources {
 }
 
 task move(type: Copy) {
-    from "${buildDir}\\libs\\" + rootProject.name + "-" + version + ".jar"
+    from "${buildDir}\\libs\\" + rootProject.name + ".jar"
     into "SERVER_TEST/plugins/"
 }
 
