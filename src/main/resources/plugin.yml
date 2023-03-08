@@ -39,6 +39,11 @@ permissions:
   ecatup.whois:
     description: Permet d'utiliser /whois
 
+  ecatup.groupperms:
+    description: Utiliser les commandes de permissions de groupes
+  ecatup.playerperms:
+    description: Utiliser les commandes de permissions de groupes
+
 commands:
   lobby:
     description: Teleport to the lobby
@@ -111,3 +116,17 @@ commands:
       - wspeed
       - wsp
     permission: ecatup.speed.walk
+
+
+  group-perms:
+    description: All about group perms
+    aliases:
+      - g-perms
+      - gperms
+    permission: ecatup.groupperms.help
+  player-perms:
+    description: All about group perms
+    aliases:
+      - p-perms
+      - pperms
+    permission: ecatup.playerperms.help

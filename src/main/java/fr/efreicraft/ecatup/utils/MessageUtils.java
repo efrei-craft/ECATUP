@@ -22,7 +22,7 @@ public class MessageUtils {
         /**
          * Préfixe basique pour le plugin.
          */
-        MINIGAMES("&bLudos"),
+        PLUGIN("&bECATUP"),
 
         /**
          * Préfixe pour le serveur.

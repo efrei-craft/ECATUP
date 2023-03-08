@@ -25,6 +25,7 @@ import java.util.Map;
  * Joueur des mini-jeux.
  *
  * @author Antoine B. {@literal <antoine@jiveoff.fr>}
+ * @author Idir NM. {@literal <idir.nait-meddour@efrei.fr>}
  */
 public class ECPlayer {
 
