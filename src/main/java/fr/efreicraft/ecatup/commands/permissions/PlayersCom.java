@@ -63,7 +63,7 @@ public class PlayersCom implements TabExecutor {
                     }
 
                     // Message de succès
-                    MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8-> &e%s".formatted(target.getName(), permission));
+                    MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8<- &e%s".formatted(target.getName(), permission));
                 }
                 else if (args[1].startsWith("-")) {
                     String permission = args[1].substring(1);
@@ -72,8 +72,6 @@ public class PlayersCom implements TabExecutor {
 
                         PlayerService.revokePermissions(target.getUniqueId().toString(), List.of(permissionInput));
                         ECATUP.getInstance().getPlayerManager().getPlayer(target).updatePermission(permission, false);
-                        // TODO Permissions personnelles à ajouter.
-                        // ECATUP.getInstance().getPlayerManager().getPlayer(target).getAnimusPlayer().permissions;
                     } catch (ApiException e) {
                         MessageUtils.sendMessage(sender, "&cPas pu atteindre la base de données. Vos changements n'ont pas été effectués");
                         Bukkit.getLogger().severe("=== ERREUR API ===");
@@ -84,7 +82,7 @@ public class PlayersCom implements TabExecutor {
                     }
 
                     // Message de succès
-                    MessageUtils.sendMessage(sender, "&8[&4-&8] &e%s &8-> &e%s".formatted(target.getName(), permission));
+                    MessageUtils.sendMessage(sender, "&8[&4-&8] &e%s &8<- &e%s".formatted(target.getName(), permission));
                 } else if (args[1].equalsIgnoreCase("setPrefix")) {
                     //TODO: préfixes joueurs ajoutés ??
                     MessageUtils.sendMessage(sender, "&cSoon...");
@@ -126,7 +124,7 @@ public class PlayersCom implements TabExecutor {
                     }
 
                     // Message de succès
-                    MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8-> &e%s".formatted(target.getName(), permission));
+                    MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8<- &e%s".formatted(target.getName(), permission));
                     if (expiresIn != null)
                         MessageUtils.sendMessage(sender, "  &7&o(expire le %s)".formatted(Instant.now().plus(expiresIn).toString()));
                 } else {
@@ -170,7 +168,7 @@ public class PlayersCom implements TabExecutor {
                 }
 
                 // Message de succès
-                MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8-> &e%s".formatted(target.getName(), permission));
+                MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8<- &e%s".formatted(target.getName(), permission));
                 if (expiresIn != null)
                     MessageUtils.sendMessage(sender, "  &7&o(expire le %s)".formatted(Instant.now().plus(expiresIn).toString()));
                 MessageUtils.sendMessage(sender, "  &7&o(valable dans %s)".formatted(Arrays.toString(contexts.toArray())));

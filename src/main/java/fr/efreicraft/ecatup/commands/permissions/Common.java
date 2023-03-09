@@ -18,6 +18,9 @@ public class Common {
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> +<perm> [expiresIn] [context] &3Ajoute une permission au joueur");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> setPrefix [newPrefix] &3Change ou annule le préfixe du groupe (entre ')");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> -<perm> &3Retire une permission au joueur");
+        MessageUtils.sendMessage(player, "");
+        MessageUtils.sendMessage(player, "  &8» &e/gperms add <group> &3Crée un groupe");
+        MessageUtils.sendMessage(player, "  &8» &e/gperms remove <group> &3Supprime un groupe");
     }
 
     public static void sendPlayerHelp(CommandSender player) {
