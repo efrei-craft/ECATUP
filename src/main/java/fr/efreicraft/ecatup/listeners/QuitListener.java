@@ -18,15 +18,15 @@ public class QuitListener implements Listener {
         event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
-        String playerName = event.getPlayer().getName();
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("Déconnexion")
-                .setDescription("**" + playerName + "** a quitté le serveur !")
-                .setColor(Color.decode("#ff0000"))
-                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-        );
-        webhook.execute();
-        PreferenceCache.unCache(event.getPlayer());
+//        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
+//        String playerName = event.getPlayer().getName();
+//        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+//                .setTitle("Déconnexion")
+//                .setDescription("**" + playerName + "** a quitté le serveur !")
+//                .setColor(Color.decode("#ff0000"))
+//                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+//        );
+//        webhook.execute();
+//        PreferenceCache.unCache(event.getPlayer());
     }
 }

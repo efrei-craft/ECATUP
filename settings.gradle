@@ -1,5 +1,5 @@
 rootProject.name = 'ECATUP'
 
-includeBuild("../AnimusClient") {
-    name = "AnimusClient"
+includeBuild("../AnimusClient-Paper") {
+    name = "AnimusClient-Paper"
 }

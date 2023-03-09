@@ -12,6 +12,7 @@ import fr.efreicraft.ecatup.listeners.ChatListener;
 import fr.efreicraft.ecatup.listeners.JoinListener;
 import fr.efreicraft.ecatup.listeners.QuitListener;
 import fr.efreicraft.ecatup.players.PlayerManager;
+import fr.efreicraft.ecatup.players.menus.MenuListener;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -96,6 +97,8 @@ public final class ECATUP extends JavaPlugin {
         playerManager = new PlayerManager();
 
         groupManager = new GroupManager();
+
+        Bukkit.getPluginManager().registerEvents(new MenuListener(), INSTANCE);
     }
 
     @Override
