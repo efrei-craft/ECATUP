@@ -244,11 +244,23 @@ public class ECPlayer {
             attachment.setPermission(permission.getKey(), permission.getValue().booleanValue());
         }
     }
+    public void updatePermissions(List<String> changes, boolean newValue) {
+        for (String permission : changes) {
+            attachment.setPermission(permission, newValue);
+        }
+    }
     public void updatePermission(String changed, boolean newValue) {
         attachment.setPermission(changed, newValue);
     }
 
     public void invalidateAllPermissions() {
         attachment.getPermissions().keySet().forEach(attachment::unsetPermission);
+    }
+
+    public List<String> getPermissions() {
+        return attachment.getPermissions().entrySet().stream()
+                .filter(Map.Entry::getValue) // Ne garder que les perms qui sont true
+                .map(Map.Entry::getKey) // Ne prendre que les clés
+                .toList();
     }
 }
