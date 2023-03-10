@@ -1,5 +1,7 @@
 package fr.efreicraft.ecatup.players;
 
+import fr.efreicraft.animus.models.PermGroup;
+import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.events.ECPlayerJoined;
 
@@ -76,4 +78,15 @@ public class PlayerManager {
         return players;
     }
 
+    public Set<ECPlayer> getPlayersInGroup(PermGroup group) {
+        Set<ECPlayer> players = new HashSet<>();
+        for (ECPlayer player : this.players) {
+            for (PermGroupPlayer permGroup : player.getAnimusPlayer().getPermGroups()) {
+                if(permGroup.getName().equals(group.getName())) {
+                    players.add(player);
+                }
+            }
+        }
+        return players;
+    }
 }
