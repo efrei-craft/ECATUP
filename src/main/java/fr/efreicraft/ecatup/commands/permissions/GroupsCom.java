@@ -4,10 +4,10 @@ import fr.efreicraft.animus.endpoints.PermGroupService;
 import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.animus.models.PermGroup;
 import fr.efreicraft.animus.models.PermGroupPlayer;
+import fr.efreicraft.animus.models.PermissionInput;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.utils.MessageUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class GroupsCom implements TabExecutor {
@@ -54,7 +55,7 @@ public class GroupsCom implements TabExecutor {
                 return true;
             }
         }
-Double.MAX_VALUE
+
         switch (args.length) {
             case 2 -> {
                 if (args[0].equalsIgnoreCase("add")) {
@@ -65,15 +66,36 @@ Double.MAX_VALUE
                         MessageUtils.sendMessage(sender, "&cPas pu accéder à la base de données pour créer le groupe.");
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
-                    //TODO: Remove group when endpoint is created
-                    //try {} catch(ApiException e) {}
+                    //TODO réviser la logique de suppression de groupe
+                    //TODO mettre cette logique dans une fonction à part pour le IRedisMessageHandler
+
+                    // Toutes les autres perms qui ne sont pas dans le groupe à supprimer
+                    List<PermissionInput> allOtherPerms = new ArrayList<>();
+                    try {
+                        List<PermGroup> permGroupList = PermGroupService.getPermGroups();
+
+                        PermGroup groupToDelete = ECATUP.getInstance().getGroupManager().getGroup(args[1]);
+                        if (groupToDelete == null) throw new NoSuchElementException();
+
+                        PermGroupService.deletePermGroup(groupToDelete.getId());
+
+                        for (PermGroup permGroup : permGroupList) {
+                            if (!permGroup.getName().equalsIgnoreCase(args[1])) {
+                                allOtherPerms.addAll(permGroup.getPermissions());
+                            }
+                        }
+                    } catch (ApiException ignored) {
+                        MessageUtils.sendMessage(sender, "&cPas pu accéder à la base de données pour supprimer le groupe.");
+                        return true;
+                    } catch (NoSuchElementException ignored) {
+                        MessageUtils.sendMessage(sender, "&cCe groupe n'existe pas dans la base de données !");
+                        return true;
+                    }
 
                     for (ECPlayer ecPlayer : ECATUP.getInstance().getPlayerManager().getPlayers()) {
                         List<PermGroupPlayer> permGroups = ecPlayer.getAnimusPlayer().getPermGroups();
-
-                        // Toutes les autres perms qui ne sont pas dans le groupe à supprimer
-                        List<String> allOtherPerms = new ArrayList<>();
-
+                        permGroups.removeIf(grp -> grp.getName().equalsIgnoreCase(args[1]));
+                        ecPlayer.getAnimusPlayer().setPermGroups(permGroups);
                     }
                 } else {
 
