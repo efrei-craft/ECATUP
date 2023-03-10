@@ -34,7 +34,6 @@ dependencies {
     compileOnly files("../AnimusClient/swagger/code/")
     compileOnly "fr.efreicraft:AnimusClient"
 
-    compileOnly "fr.efreicraft:AnimusClient-Paper"
 }
 
 jar {
