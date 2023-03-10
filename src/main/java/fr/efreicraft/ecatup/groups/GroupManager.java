@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.scoreboard.Team;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class GroupManager {
@@ -79,6 +80,15 @@ public class GroupManager {
     private List<PermGroup> getGroups() {
         try {
             return PermGroupService.getPermGroups();
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Nullable
+    public PermGroup getGroup(String name) {
+        try {
+            return PermGroupService.getPermGroups().stream().filter(permGroup -> permGroup.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
