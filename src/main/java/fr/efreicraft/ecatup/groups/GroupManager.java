@@ -9,6 +9,7 @@ import fr.efreicraft.ecatup.players.ECPlayer;
 import fr.efreicraft.ecatup.utils.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Team;
 
 import javax.annotation.Nullable;
@@ -90,6 +91,17 @@ public class GroupManager {
         try {
             return PermGroupService.getPermGroups().stream().filter(permGroup -> permGroup.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
         } catch (ApiException e) {
+            Bukkit.getLogger().severe("Error while getting group by name: " + name);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Nullable
+    public PermGroup getGroup(int id) {
+        try {
+            return PermGroupService.getPermGroups().stream().filter(permGroup -> permGroup.getId() == id).findFirst().orElse(null);
+        } catch (ApiException e) {
+            Bukkit.getLogger().severe("Error while getting group by id: " + id);
             throw new RuntimeException(e);
         }
     }
