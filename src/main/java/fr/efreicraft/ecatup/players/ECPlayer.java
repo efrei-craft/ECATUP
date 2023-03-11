@@ -178,6 +178,13 @@ public class ECPlayer {
     }
 
     /**
+     * Retourne le préfixe du joueur.
+     */
+    public String getChatPrefix() {
+        return prefix;
+    }
+
+    /**
      * Remets le joueur à un état de jeu normal.
      */
     public void resetPlayer() {
@@ -209,7 +216,7 @@ public class ECPlayer {
             }
         } else {
             for (Plugin pl : Bukkit.getPluginManager().getPlugins()) {
-                for (Permission inner_perm : pl.getDescription().getPermissions()) {
+                for (Permission inner_perm : pl.getPluginMeta().getPermissions()) {
                     if(inner_perm.getName().startsWith(permission.substring(0, permission.length() - 1))) {
                         permissions.add(inner_perm.getName());
                     }
