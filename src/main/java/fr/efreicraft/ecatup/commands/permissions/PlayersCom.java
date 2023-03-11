@@ -19,6 +19,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 
+import static fr.efreicraft.ecatup.commands.permissions.Common.ErrorMessages.*;
+
 public class PlayersCom implements TabExecutor {
 
     private static final List<String> NEVER_EXPIRE = List.of(
@@ -39,7 +41,7 @@ public class PlayersCom implements TabExecutor {
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            MessageUtils.sendMessage(sender, MessageUtils.ChatPrefix.PLUGIN, "&cAucun joueur '" + args[0] + "' trouvé ! Serait-il déconnecté...?");
+            MessageUtils.sendMessage(sender, MessageUtils.ChatPrefix.PLUGIN, PLAYER_NOT_FOUND.format(args[0]));
             return true;
         }
 
@@ -54,7 +56,7 @@ public class PlayersCom implements TabExecutor {
                         PlayerService.addPermissions(target.getUniqueId().toString(), List.of(new PermissionInput().name(permission)));
                         ECATUP.getInstance().getPlayerManager().getPlayer(target).updatePermission(permission, true);
                     } catch (ApiException e) {
-                        MessageUtils.sendMessage(sender, "&cPas pu atteindre la base de données. Vos changements n'ont pas été effectués");
+                        MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
                         Bukkit.getLogger().severe("=== ERREUR API ===");
                         Bukkit.getLogger().severe("%s a essayé d'ajouter la permission '%s' à %s".formatted(sender.getName(), permission, target.getName()));
                         Bukkit.getLogger().severe("Message d'exception API : %s".formatted(e.getMessage()));
@@ -73,7 +75,7 @@ public class PlayersCom implements TabExecutor {
                         PlayerService.revokePermissions(target.getUniqueId().toString(), List.of(permissionInput));
                         ECATUP.getInstance().getPlayerManager().getPlayer(target).updatePermission(permission, false);
                     } catch (ApiException e) {
-                        MessageUtils.sendMessage(sender, "&cPas pu atteindre la base de données. Vos changements n'ont pas été effectués");
+                        MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
                         Bukkit.getLogger().severe("=== ERREUR API ===");
                         Bukkit.getLogger().severe("%s a essayé de révoquer la permission '%s' à %s".formatted(sender.getName(), permission, target.getName()));
                         Bukkit.getLogger().severe("Message d'exception API : %s".formatted(e.getMessage()));
@@ -88,7 +90,7 @@ public class PlayersCom implements TabExecutor {
                     MessageUtils.sendMessage(sender, "&cSoon...");
                 }
                 else {
-                    MessageUtils.sendMessage(sender, "&cMauvais argument : '%s'".formatted(args[1]));
+                    MessageUtils.sendMessage(sender, BAD_ARGUMENT.format(args[1]));
                 }
             }
 
@@ -112,14 +114,14 @@ public class PlayersCom implements TabExecutor {
                         // TODO Permissions personnelles à ajouter.
                         // ECATUP.getInstance().getPlayerManager().getPlayer(target).getAnimusPlayer().permissions;
                     } catch (ApiException e) {
-                        MessageUtils.sendMessage(sender, "&cPas pu atteindre la base de données. Vos changements n'ont pas été effectués");
+                        MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
                         Bukkit.getLogger().severe("=== ERREUR API ===");
                         Bukkit.getLogger().severe("%s a essayé d'ajouter la permission '%s' à %s".formatted(sender.getName(), permission, target.getName()));
                         Bukkit.getLogger().severe("Message d'exception API : %s".formatted(e.getMessage()));
                         Bukkit.getLogger().severe("Code de réponse API : %s".formatted(e.getCode()));
                         return true;
                     } catch (DateTimeParseException e) {
-                        MessageUtils.sendMessage(sender, "&cMauvaise durée donnée : '%s'".formatted(args[2]));
+                        MessageUtils.sendMessage(sender, BAD_DURATION.format(args[2]));
                         return true;
                     }
 
@@ -128,14 +130,14 @@ public class PlayersCom implements TabExecutor {
                     if (expiresIn != null)
                         MessageUtils.sendMessage(sender, "  &7&o(expire le %s)".formatted(Instant.now().plus(expiresIn).toString()));
                 } else {
-                    MessageUtils.sendMessage(sender, "&cTrop d'arguments !");
+                    MessageUtils.sendMessage(sender, TOO_MANY_ARGUMENTS.get());
                 }
             }
 
             // Ajout de perm avec expiration et contexte
             case 4 -> {
                 if (args[1].charAt(0) != '+') {
-                    MessageUtils.sendMessage(sender, "&cTrop d'arguments !");
+                    MessageUtils.sendMessage(sender, TOO_MANY_ARGUMENTS.get());
                     return true;
                 }
                 String permission = args[1].substring(1);
@@ -156,14 +158,14 @@ public class PlayersCom implements TabExecutor {
                     // TODO Permissions personnelles à ajouter.
                     // ECATUP.getInstance().getPlayerManager().getPlayer(target).getAnimusPlayer().permissions;
                 } catch (ApiException e) {
-                    MessageUtils.sendMessage(sender, "&cPas pu atteindre la base de données. Vos changements n'ont pas été effectués");
+                    MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
                     Bukkit.getLogger().severe("=== ERREUR API ===");
                     Bukkit.getLogger().severe("%s a essayé d'ajouter la permission '%s' à %s".formatted(sender.getName(), permission, target.getName()));
                     Bukkit.getLogger().severe("Message d'exception API : %s".formatted(e.getMessage()));
                     Bukkit.getLogger().severe("Code de réponse API : %s".formatted(e.getCode()));
                     return true;
                 } catch (DateTimeParseException e) {
-                    MessageUtils.sendMessage(sender, "&cMauvaise durée donnée : '%s'".formatted(args[2]));
+                    MessageUtils.sendMessage(sender, BAD_DURATION.format(args[2]));
                     return true;
                 }
 
