@@ -1,9 +1,12 @@
 package fr.efreicraft.ecatup.utils;
 
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Objects;
 
 /**
  * Utilitaire de formatteur de messages.
@@ -124,7 +127,6 @@ public class MessageUtils {
     /**
      * Envoyer un message à un joueur.
      * @param player Joueur.
-     * @param prefix Préfixe du message.
      * @param message Message (coloration par esperluette).
      */
     public static void sendMessage(CommandSender player, String message) {
@@ -146,6 +148,14 @@ public class MessageUtils {
      */
     public static void broadcastMessage(String message) {
         sendMessage(Bukkit.getOnlinePlayers().toArray(new Player[0]), ChatPrefix.EMPTY, message);
+    }
+
+    public static String colorize(String message) {
+        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, ""));
+    }
+
+    public static String colorize(TextComponent message) {
+        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message.content(), ""));
     }
 
 }

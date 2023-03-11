@@ -1,6 +1,7 @@
 package fr.efreicraft.ecatup.commands.permissions;
 
 import fr.efreicraft.animus.endpoints.PermGroupService;
+import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.animus.models.PermGroup;
 import fr.efreicraft.animus.models.PermGroupPlayer;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +46,7 @@ public class GroupsCom implements TabExecutor {
             return true;
         }
 
+        // Setup arg0 qui est le groupe
         PermGroup group = null;
         if (!("add".equalsIgnoreCase(args[0]) || "remove".equalsIgnoreCase(args[0]) || "groups".equalsIgnoreCase(args[0]))) {
             try {
@@ -60,6 +63,9 @@ public class GroupsCom implements TabExecutor {
                 return true;
             }
         }
+
+        //Setup arg2 qui est le joueur
+        Player target = Bukkit.getPlayer(args[2]);
 
         switch (args.length) {
             // Info groupes
@@ -87,11 +93,28 @@ public class GroupsCom implements TabExecutor {
                 } else {
                     String permission = args[1].substring(1);
                     if (args[1].charAt(0) == '+') {
+                        try {
+                            PermGroupService.addPermsToGroup(group.getId(), List.of(new PermissionInput().name(permission)));
+                            ECATUP.getInstance().getPlayerManager().getPlayersInGroup(group).forEach(player -> player.updatePermission(permission, true));
 
+                            MessageUtils.sendMessage(sender, "&8[&a+&8] &e%s &8<- &e%s".formatted(group.getName(), permission));
+                        } catch (ApiException e) {
+                            MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
+                        }
                     } else if (args[1].charAt(0) == '-') {
-
+                        try {
+                            PermGroupService.removePermsOfGroup(group.getId(), List.of(permission));
+                            ECATUP.getInstance().getPlayerManager().getPlayersInGroup(group).forEach(ECPlayer::addPlayerPermissions);
+                            MessageUtils.sendMessage(sender, "&8[&4-&8] &e%s &8<- &e%s".formatted(group.getName(), permission));
+                        } catch (ApiException e) {
+                            MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
+                        }
                     } else if (args[1].equalsIgnoreCase("setPrefix")) {
-                        //TODO updatePermGroup()
+                        try {
+                            PermGroupService.updatePermGroup(group.getId(), null, args[2] + " ", null, null, false, true);
+                        } catch (ApiException e) {
+                            MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
+                        }
                     } else {
                         MessageUtils.sendMessage(sender, BAD_ARGUMENT.format(args[1]));
                     }
@@ -101,9 +124,47 @@ public class GroupsCom implements TabExecutor {
             // Ajouter/Supprimer un joueur d'un groupe
             case 3 -> {
                 if ("add".equalsIgnoreCase(args[1])) {
+                    if (target == null) {
+                        MessageUtils.sendMessage(sender, PLAYER_NOT_FOUND.format(args[2]));
+                        return true;
+                    }
+                    if (ECATUP.getInstance()
+                            .getPlayerManager()
+                            .getPlayer(target)
+                            .getAnimusPlayer()
+                            .getPermGroups().stream().map(PermGroupPlayer::getName).toList().contains(group.getName())) {
+                        MessageUtils.sendMessage(sender, PLAYER_ALREADY_IN_GROUP.format(target.getName()));
+                        return true;
+                    }
 
+                    try {
+                        PlayerService.addToGroup(target.getUniqueId().toString(), group.getName());
+                        MessageUtils.sendMessage(sender, "&aLe joueur &e%s &aa bien été ajouté au groupe &e%s &a!".formatted(target.getName(), group.getName()));
+                    } catch (ApiException e) {
+                        MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
+                        return true;
+                    }
                 } else if ("remove".equalsIgnoreCase(args[1])) {
+                    if (target == null) {
+                        MessageUtils.sendMessage(sender, PLAYER_NOT_FOUND.format(args[2]));
+                        return true;
+                    }
+                    if (ECATUP.getInstance()
+                            .getPlayerManager()
+                            .getPlayer(target)
+                            .getAnimusPlayer()
+                            .getPermGroups().stream().map(PermGroupPlayer::getName).toList().contains(group.getName())) {
+                        MessageUtils.sendMessage(sender, PLAYER_ALREADY_IN_GROUP.format(target.getName()));
+                        return true;
+                    }
 
+                    try {
+                        PlayerService.addToGroup(target.getUniqueId().toString(), group.getName());
+                        MessageUtils.sendMessage(sender, "&aLe joueur &e%s &aa bien été ajouté au groupe &e%s &a!".formatted(target.getName(), group.getName()));
+                    } catch (ApiException e) {
+                        MessageUtils.sendMessage(sender, COULD_NOT_REACH_DATABASE.get());
+                        return true;
+                    }
                 }
             }
         }

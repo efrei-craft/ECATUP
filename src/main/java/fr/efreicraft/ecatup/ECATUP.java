@@ -4,6 +4,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
 import fr.efreicraft.ecatup.commands.gamemode.*;
+import fr.efreicraft.ecatup.commands.permissions.GroupsCom;
+import fr.efreicraft.ecatup.commands.permissions.PlayersCom;
 import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
 import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
 import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
@@ -81,6 +83,9 @@ public final class ECATUP extends JavaPlugin {
         registerCommand("sudo", new Sudo());
         registerCommand("walkspeed", new WalkSpeed());
         registerCommand("whois", new WhoIs());
+
+        registerCommand("groupperms", new GroupsCom());
+        registerCommand("playerperms", new PlayersCom());
 
         // Send log to Discord
         DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));

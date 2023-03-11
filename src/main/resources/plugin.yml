@@ -118,15 +118,15 @@ commands:
     permission: ecatup.speed.walk
 
 
-  group-perms:
+  groupperms:
     description: All about group perms
     aliases:
       - g-perms
       - gperms
-    permission: ecatup.groupperms.help
-  player-perms:
+    permission: ecatup.groupperms
+  playerperms:
     description: All about group perms
     aliases:
       - p-perms
       - pperms
-    permission: ecatup.playerperms.help
+    permission: ecatup.playerperms

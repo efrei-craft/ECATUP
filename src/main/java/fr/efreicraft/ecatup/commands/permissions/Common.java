@@ -18,7 +18,7 @@ public class Common {
         PLAYER_NOT_FOUND("&cLe joueur %s n'est pas connecté."),
         GROUP_NOT_FOUND("&e%s&cCe groupe n'existe pas dans la base de données !"),
         PLAYER_NOT_IN_GROUP("&e%s&c n'est pas dans ce groupe."),
-        PLAYER_ALREADY_IN_GROUP("&cLe joueur est déjà dans ce groupe."),
+        PLAYER_ALREADY_IN_GROUP("&cLe joueur %s est déjà dans ce groupe."),
         GROUP_ALREADY_EXISTS("&e%s &cexiste déjà dans la base de données !"),
         COULD_NOT_REACH_DATABASE("&cBase de données inaccessible."),
         BAD_DURATION("&cMauvaise durée donnée : '%s'");
@@ -43,7 +43,7 @@ public class Common {
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> &3Afficher les infos sur <group>");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> add <player> &3Ajoute <player> à <group>");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> remove <player> &3Supprime <player> de <group>");
-        MessageUtils.sendMessage(player, "  &8» &e/gperms <group> +<perm> [expiresIn] [context] &3Ajoute une permission au joueur");
+        MessageUtils.sendMessage(player, "  &8» &e/gperms <group> +<perm> &3Ajoute une permission au joueur");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> setPrefix [newPrefix] &3Change ou annule le préfixe du groupe (entre ')");
         MessageUtils.sendMessage(player, "  &8» &e/gperms <group> -<perm> &3Retire une permission au joueur");
         MessageUtils.sendMessage(player, "");
@@ -55,7 +55,7 @@ public class Common {
         MessageUtils.sendMessage(player, MessageUtils.ChatPrefix.PLUGIN, "&3&l======= AIDE =======");
 
         MessageUtils.sendMessage(player, "  &8» &e/pperms <player> &3Afficher les groupes du joueur");
-        MessageUtils.sendMessage(player, "  &8» &e/pperms <player> +<perm> [expiresIn] [[context1],[context2],[context3] OR ALL] &3Ajoute une permission au joueur");
+        MessageUtils.sendMessage(player, "  &8» &e/pperms <player> +<perm> &3Ajoute une permission au joueur");
         MessageUtils.sendMessage(player, "  &8» &e/pperms <player> setPrefix [newPrefix] &3Change ou réinitialise le préfixe du joueur (entre ')");
         MessageUtils.sendMessage(player, "  &8» &e/pperms <player> -<perm> &3Retire une permission au joueur");
     }
