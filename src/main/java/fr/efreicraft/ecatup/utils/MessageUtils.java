@@ -40,6 +40,11 @@ public class MessageUtils {
         ADMIN("&cAdmin"),
 
         /**
+         * Préfixe pour les files.
+         */
+        QUEUE("&bFile d'attente"),
+
+        /**
          * Préfixes pour les messages concernant les cartes.
          */
         MAP("&5Carte"),
