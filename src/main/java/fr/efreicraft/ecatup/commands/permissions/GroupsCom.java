@@ -65,7 +65,14 @@ public class GroupsCom implements TabExecutor {
         }
 
         //Setup arg2 qui est le joueur
-        Player target = Bukkit.getPlayer(args[2]);
+        Player target = null;
+        if (args.length > 2)
+            if ("add".equalsIgnoreCase(args[2]) || "remove".equalsIgnoreCase(args[2]))
+                target = Bukkit.getPlayer(args[2]);
+        else
+            if ("add".equalsIgnoreCase(args[2]) || "remove".equalsIgnoreCase(args[2])) {
+                MessageUtils.sendMessage(sender, NOT_ENOUGH_ARGUMENTS.get());
+            }
 
         switch (args.length) {
             // Info groupes
@@ -174,7 +181,14 @@ public class GroupsCom implements TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return null;
+        List<String> specialArgList = List.of("groups", "add", "remove", "<group>");
+
+        if (args.length == 1) {
+            return specialArgList;
+        } else if (args.length == 2) {
+            if (!specialArgList.contains(args[0])) return List.of("+<perm>", "setPrefix", "-<perm>");
+        }
+        return new ArrayList<>();
     }
 
     public static void printGroups(CommandSender to) {

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static fr.efreicraft.ecatup.commands.permissions.Common.ErrorMessages.*;
@@ -106,7 +107,7 @@ public class PlayersCom implements TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 2)
             return List.of("+<perm>", "setPrefix", "-<perm>");
-        return null;
+        return new ArrayList<>();
     }
 
 }
