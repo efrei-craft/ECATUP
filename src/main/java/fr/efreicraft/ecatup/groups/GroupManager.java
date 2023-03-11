@@ -25,7 +25,7 @@ public class GroupManager {
         List<PermGroup> groups = getGroups();
 
         for(PermGroup group : groups) {
-            Character priority = (char) ('a' + group.getPriority().intValue());
+            Character priority = (char) ('z' - group.getPriority().intValue());
             String teamName = priority + group.getName();
             Team team = ECATUP.getInstance().getServer()
                     .getScoreboardManager()
@@ -53,7 +53,7 @@ public class GroupManager {
         List<PermGroup> groups = getGroups();
 
         for(PermGroup group : groups) {
-            Character priority = (char) ('a' + group.getPriority().intValue());
+            Character priority = (char) ('z' - group.getPriority().intValue());
             String teamName = priority + group.getName();
             Team team = ECATUP.getInstance().getServer()
                     .getScoreboardManager()
@@ -66,7 +66,7 @@ public class GroupManager {
 
     public void addPlayerToTeam(ECPlayer player) {
         PermGroupPlayer group = player.getAnimusPlayer().getPermGroups().get(0);
-        Character priority = (char) ('a' + group.getPriority().intValue());
+        Character priority = (char) ('z' - group.getPriority().intValue());
         String teamName = priority + group.getName();
         Team team = ECATUP.getInstance().getServer()
                 .getScoreboardManager()

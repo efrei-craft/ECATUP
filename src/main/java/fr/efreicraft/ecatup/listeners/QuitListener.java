@@ -15,7 +15,7 @@ import java.io.IOException;
 public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) throws IOException {
-        event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
+//        event.quitMessage(event.getPlayer().displayName().append(Component.text(ChatColor.GRAY + " a quitté le serveur !")));
 
         // Send log to Discord
 //        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
