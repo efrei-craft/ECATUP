@@ -16,7 +16,7 @@ public class Common {
         TOO_MANY_ARGUMENTS("&cTrop d'arguments."),
         BAD_ARGUMENT("&cMauvais argument : '%s'"),
         PLAYER_NOT_FOUND("&cLe joueur %s n'est pas connecté."),
-        GROUP_NOT_FOUND("&e%s&cCe groupe n'existe pas dans la base de données !"),
+        GROUP_NOT_FOUND("&e%s &cn'existe pas dans la base de données !"),
         PLAYER_NOT_IN_GROUP("&e%s&c n'est pas dans ce groupe."),
         PLAYER_ALREADY_IN_GROUP("&cLe joueur %s est déjà dans ce groupe."),
         GROUP_ALREADY_EXISTS("&e%s &cexiste déjà dans la base de données !"),
