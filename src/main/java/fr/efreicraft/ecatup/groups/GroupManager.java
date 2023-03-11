@@ -41,7 +41,7 @@ public class GroupManager {
                     .build());
 
             team.color(ColorUtils.getTeamColorSetFromCode(group.getColor()).textColor());
-            team.setAllowFriendlyFire(false);
+            team.setAllowFriendlyFire(true);
         }
 
         for(ECPlayer player : ECATUP.getInstance().getPlayerManager().getPlayers()) {

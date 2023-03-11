@@ -178,6 +178,14 @@ public class ECPlayer {
     }
 
     /**
+     * Retourne le nom du joueur coloré avec son rang.
+     */
+    public String getPrefixColor() {
+        PermGroupPlayer group = this.animusPlayer.getPermGroups().get(0);
+        return group.getColor();
+    }
+
+    /**
      * Retourne le préfixe du joueur.
      */
     public String getChatPrefix() {
