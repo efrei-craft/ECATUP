@@ -136,9 +136,9 @@ public class PlayerScoreboard {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if(playerScoreboard.board.getLines().isEmpty() || playerScoreboard.board.isDeleted()) return;
-                    int indexToSet = playerScoreboard.board.getLines().size() - 1;
-                    playerScoreboard.board.updateLine(indexToSet, currentAnimationString);
+                    int currentSize = playerScoreboard.board.getLines().size(); // devrait fix les lignes négatives
+                    if(currentSize == 0 || playerScoreboard.board.isDeleted()) return;
+                    playerScoreboard.board.updateLine(currentSize - 1, currentAnimationString);
                 }
             }.runTaskAsynchronously(ECATUP.getInstance());
         }
