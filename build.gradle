@@ -48,6 +48,10 @@ jar {
     }
 }
 
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
+}
+
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
