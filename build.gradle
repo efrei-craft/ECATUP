@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'fr.efreicraft'
@@ -16,6 +17,18 @@ repositories {
     maven {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+
+    if (System.getenv("NEXUS_REPOSITORY")) {
+        println "Using Nexus repository"
+        maven {
+            name = 'nexus'
+            url = uri(System.getenv("NEXUS_REPOSITORY"))
+            credentials {
+                username = System.getenv("NEXUS_USERNAME")
+                password = System.getenv("NEXUS_PASSWORD")
+            }
+        }
     }
 }
 
@@ -63,4 +76,35 @@ processResources {
 task move(type: Copy) {
     from "build/libs/" + rootProject.name + "-" + version + ".jar"
     into "SERVER_TEST/plugins/"
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = rootProject.group
+            artifactId = rootProject.name
+            version = rootProject.version
+
+            from components.java
+
+            pom.packaging = 'jar'
+
+            artifact("${buildDir}/libs/${rootProject.name}.jar") {
+                classifier = 'jar'
+            }
+        }
+    }
+    repositories {
+        if (System.getenv("NEXUS_REPOSITORY")) {
+            maven {
+                url = uri(System.getenv("NEXUS_REPOSITORY"))
+                credentials {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+        }
+        mavenLocal()
+    }
 }
