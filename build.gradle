@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'fr.efreicraft'
@@ -23,6 +24,16 @@ repositories {
             includeGroup 'com.bergerkiller.bukkit'
             includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
             includeGroup 'com.bergerkiller.mountiplex'
+    }
+    if (System.getenv("NEXUS_REPOSITORY")) {
+        println "Using Nexus repository"
+        maven {
+            name = 'nexus'
+            url = uri(System.getenv("NEXUS_REPOSITORY"))
+            credentials {
+                username = System.getenv("NEXUS_USERNAME")
+                password = System.getenv("NEXUS_PASSWORD")
+            }
         }
     }
 }
@@ -38,6 +49,10 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
 }
 
 def targetJavaVersion = 17
@@ -72,4 +87,35 @@ task move(type: Copy) {
 
 configurations {
     jar.archiveName = rootProject.name + ".jar"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = rootProject.group
+            artifactId = rootProject.name
+            version = rootProject.version
+
+            from components.java
+
+            pom.packaging = 'jar'
+
+            artifact("${buildDir}/libs/${rootProject.name}.jar") {
+                classifier = 'jar'
+            }
+        }
+    }
+    repositories {
+        if (System.getenv("NEXUS_REPOSITORY")) {
+            maven {
+                url = uri(System.getenv("NEXUS_REPOSITORY"))
+                credentials {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+        } else {
+            mavenLocal()
+        }
+    }
 }
