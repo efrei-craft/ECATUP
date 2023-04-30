@@ -1,17 +1,15 @@
 name: ECATUP
 version: '${version}'
-main: fr.efreicraft.ecatup.Main
+main: fr.efreicraft.ecatup.ECATUP
 prefix: ECATUP
 api-version: 1.19
 authors: [ Niilyx, DocSystem ]
 description: Les commandes et fonctions utiles d'Efrei Craft
 website: https://github.com/efrei-craft/ECATUP
 database: true
-libraries:
-  - org.mariadb.jdbc:mariadb-java-client:3.0.8
 
-depend: #Charger ECATUP APRÈS LP.
-  - LuckPerms
+depend: #Charger ECATUP APRÈS LP et ACP.
+  - AnimusClient-Paper
 
 permissions:
   ecatup.channel.use:
@@ -40,12 +38,16 @@ permissions:
     description: Permet d'utiliser /sudo
   ecatup.whois:
     description: Permet d'utiliser /whois
+  ecatup.groupperms:
+    description: Utiliser les commandes de permissions de groupes
+  ecatup.playerperms:
+    description: Utiliser les commandes de permissions de groupes
 
 commands:
   lobby:
     description: Teleport to the lobby
     usage: /lobby
-    aliases: [hub, spawn]
+    aliases: [ hub, spawn ]
     permission: ecatup.lobby
   chat:
     description: Change chat channel
@@ -96,7 +98,8 @@ commands:
     description: Slaps the shit outta someone
     aliases:
       - bitchslap
-    permission: /slap <player> [-a]
+    usage: /slap <player> [-a]
+    permission: ecatup.slap
   sudo:
     description: Makes someone say something or execute a command
     usage: /sudo <player> <something>
@@ -112,3 +115,13 @@ commands:
       - wspeed
       - wsp
     permission: ecatup.speed.walk
+  groupperms:
+    description: All about group perms
+    aliases:
+      - gperms
+    permission: ecatup.groupperms
+  playerperms:
+    description: All about group perms
+    aliases:
+      - pperms
+    permission: ecatup.playerperms

@@ -2,28 +2,21 @@ package fr.efreicraft.ecatup.listeners;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import fr.efreicraft.ecatup.Main;
-import fr.efreicraft.ecatup.PreferenceCache;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
+import fr.efreicraft.ecatup.ECATUP;
+import fr.efreicraft.ecatup.players.ECPlayer;
+import fr.efreicraft.ecatup.utils.MessageUtils;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.luckperms.api.LuckPerms;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import static fr.efreicraft.ecatup.utils.Msg.colorize;
 
 @SuppressWarnings("ALL")
-public class Chat implements Listener, PluginMessageListener {
+public class ChatListener implements Listener, PluginMessageListener {
 
 
     @Override
@@ -58,13 +51,19 @@ public class Chat implements Listener, PluginMessageListener {
         Bukkit.broadcast(component);
     }
 
-    LuckPerms LP = Main.LP;
-
     @EventHandler
+    public void onChat(AsyncChatEvent event) {
+        event.setCancelled(true);
+        ECPlayer player = ECATUP.getInstance().getPlayerManager().getPlayer(event.getPlayer());
+        MessageUtils.broadcastMessage(player.getChatName() + "&8: &f" + LegacyComponentSerializer.legacyAmpersand().serialize(event.message()));
+    }
+
+    /*@EventHandler
     public void onChat(AsyncChatEvent event) throws IOException {
         event.setCancelled(true);
 
-        boolean coloriseText = LP.getUserManager().loadUser(event.getPlayer().getUniqueId()).join().getCachedData().getPermissionData().checkPermission("ecatup.chat.color").asBoolean();
+        //TODO fix ça en obtenant ecatup.chat.color
+        boolean coloriseText = false;
 
         PreferenceCache.ChatChannel channelActuel = PreferenceCache.getChannel(event.getPlayer().getUniqueId());
 
@@ -87,7 +86,7 @@ public class Chat implements Listener, PluginMessageListener {
         while (msgCopie.indexOf("§") != -1) msgCopie.delete(msgCopie.indexOf("§"), msgCopie.indexOf("§") + 2);
 
         // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(Main.config.getString("webhook"));
+        DiscordWebhook webhook = new DiscordWebhook(ECATUP.getInstance().getConfig().getString("webhook"));
         String name = event.getPlayer().getName();
         String message = ((TextComponent)event.message()).content();
         webhook.setContent("");
@@ -100,7 +99,7 @@ public class Chat implements Listener, PluginMessageListener {
         webhook.execute();
         switch (channelActuel) {
             case GLOBAL -> {
-                Main.sendGlobalChat(msgGlobal.toString(), event.getPlayer());
+                ECATUP.sendGlobalChat(msgGlobal.toString(), event.getPlayer());
                 Bukkit.broadcast(Component.join(JoinConfiguration.noSeparators(),channelPrefix,msg
                         .clickEvent(ClickEvent.copyToClipboard(msgCopie + ": " + ((TextComponent)event.message()).content() + WHAT_TIME_IS_IT))));
             }
@@ -128,5 +127,5 @@ public class Chat implements Listener, PluginMessageListener {
             }
         }
 
-    }
+    }*/
 }

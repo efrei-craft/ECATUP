@@ -4,19 +4,20 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
 import fr.efreicraft.ecatup.commands.gamemode.*;
+import fr.efreicraft.ecatup.commands.permissions.GroupsCom;
+import fr.efreicraft.ecatup.commands.permissions.PlayersCom;
 import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
 import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
 import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
-import fr.efreicraft.ecatup.listeners.Chat;
-import fr.efreicraft.ecatup.listeners.Join;
-import fr.efreicraft.ecatup.listeners.LuckPermsListener;
-import fr.efreicraft.ecatup.listeners.Quit;
-import fr.efreicraft.ecatup.utils.DBConnection;
+import fr.efreicraft.ecatup.groups.GroupManager;
+import fr.efreicraft.ecatup.listeners.ChatListener;
+import fr.efreicraft.ecatup.listeners.JoinListener;
+import fr.efreicraft.ecatup.listeners.QuitListener;
+import fr.efreicraft.ecatup.players.PlayerManager;
+import fr.efreicraft.ecatup.players.menus.MenuListener;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,54 +36,35 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class Main extends JavaPlugin {
+public final class ECATUP extends JavaPlugin {
 
-    public static JavaPlugin INSTANCE;
-    public static FileConfiguration config;
-    public static DBConnection DB;
-    public static LuckPerms LP;
+    private static ECATUP INSTANCE;
 
+    private FileConfiguration config;
+
+    private PlayerManager playerManager;
+
+    private GroupManager groupManager;
 
     @Override
     public void onEnable() {
 
         INSTANCE = this;
-        LP = LuckPermsProvider.get();
 
         // Load config
         saveDefaultConfig();
         config = INSTANCE.getConfig();
-        config.options().copyDefaults(true); // au cas où le fichier existe mais est incomplet.
+        config.options().copyDefaults(true); // au cas où le fichier existe, mais est incomplet.
         INSTANCE.saveConfig();
-
-        // Connect to MariaDB database
-
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            DB = new DBConnection(config.getString("database.host"),
-                    config.getInt("database.port"),
-                    config.getString("database.database"),
-                    config.getString("database.user"),
-                    config.getString("database.password"));
-            DB.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         // Register BungeeCord channel
         getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
-        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new Chat());
+        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new ChatListener());
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(new Chat(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new Join(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new Quit(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new LuckPermsListener((Main) INSTANCE, LP), INSTANCE);
-
-        // Register commands
-        if (!config.getString("server_name", "").equals("lobby")) {
-            registerCommand("lobby", new Lobby()); // Only register /lobby if the server's name is "lobby"
-        }
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new QuitListener(), INSTANCE);
 
         registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
         for (PreferenceCache.ChatChannel channel : PreferenceCache.ChatChannel.values()) {
@@ -102,6 +84,9 @@ public final class Main extends JavaPlugin {
         registerCommand("walkspeed", new WalkSpeed());
         registerCommand("whois", new WhoIs());
 
+        registerCommand("groupperms", new GroupsCom());
+        registerCommand("playerperms", new PlayersCom());
+
         // Send log to Discord
         DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
         webhook.addEmbed(new DiscordWebhook.EmbedObject()
@@ -113,6 +98,12 @@ public final class Main extends JavaPlugin {
         try {
             webhook.execute();
         } catch (IOException ignored) {}
+
+        playerManager = new PlayerManager();
+
+        groupManager = new GroupManager();
+
+        Bukkit.getPluginManager().registerEvents(new MenuListener(), INSTANCE);
     }
 
     @Override
@@ -123,25 +114,22 @@ public final class Main extends JavaPlugin {
         getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
         getServer().getMessenger().unregisterIncomingPluginChannel(INSTANCE);
 
-        // Close database connection
-        DB.close();
-
-        // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("Serveur")
-                .setDescription("Le serveur s'est arrêté !")
-                .setColor(java.awt.Color.decode("#ffffff"))
-                .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-        );
         if (!config.getString("server_name", "").equalsIgnoreCase("lobby"))
             for (Player player : Bukkit.getOnlinePlayers()) {
                 sendPlayerToServer(player, "lobby");
             }
 
         try {
-            webhook.execute();
-        } catch (IOException ignored) {}
+            // Send log to Discord
+            DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
+            webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                    .setTitle("Serveur")
+                    .setDescription("Le serveur s'est arrêté !")
+                    .setColor(java.awt.Color.decode("#ffffff"))
+                    .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
+            );
+//            webhook.execute();
+        } catch (Throwable ignored) {}
     }
 
     void registerCommand(String command, CommandExecutor executor) {
@@ -152,7 +140,6 @@ public final class Main extends JavaPlugin {
         List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argPos].toLowerCase())).collect(Collectors.toList());
         List<String> results = new ArrayList<>();
         players.forEach(player -> results.add(player.getName()));
-        players.clear(); // get rid of some space & memory
         return results.isEmpty() ? null : results;
     }
 
@@ -198,5 +185,17 @@ public final class Main extends JavaPlugin {
         out.write(msgbytes.toByteArray());
 
         Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
+    }
+
+    public static ECATUP getInstance() {
+        return INSTANCE;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    public GroupManager getGroupManager() {
+        return groupManager;
     }
 }

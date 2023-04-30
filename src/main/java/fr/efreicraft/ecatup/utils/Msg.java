@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import java.util.Objects;
 
 public class Msg {
+    //TODO: refactor pour delete cette classe !!
     public static String colorize(String message) {
         return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNullElse(message, ""));
     }

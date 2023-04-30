@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'fr.efreicraft'
-version = '1.0.12'
+version = '1.1.0'
 
 compileJava.options.encoding "UTF-8"
 
@@ -18,7 +18,13 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
-
+    maven {
+        url = 'https://ci.mg-dev.eu/plugin/repository/everything'
+        content {
+            includeGroup 'com.bergerkiller.bukkit'
+            includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
+            includeGroup 'com.bergerkiller.mountiplex'
+    }
     if (System.getenv("NEXUS_REPOSITORY")) {
         println "Using Nexus repository"
         maven {
@@ -33,16 +39,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+
+    compileOnly "fr.efreicraft:AnimusClient"
 }
 
 jar {
-    manifest {
-        attributes "Main-Class": "fr.efreicraft.ecatup.Main"
-    }
-
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
@@ -78,8 +81,12 @@ processResources {
 }
 
 task move(type: Copy) {
-    from "build/libs/" + rootProject.name + "-" + version + ".jar"
+    from "${buildDir}\\libs\\" + rootProject.name + ".jar"
     into "SERVER_TEST/plugins/"
+}
+
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
 }
 
 publishing {
