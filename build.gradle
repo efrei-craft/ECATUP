@@ -24,6 +24,7 @@ repositories {
             includeGroup 'com.bergerkiller.bukkit'
             includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
             includeGroup 'com.bergerkiller.mountiplex'
+        }
     }
     if (System.getenv("NEXUS_REPOSITORY")) {
         println "Using Nexus repository"
