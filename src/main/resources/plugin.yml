@@ -1,43 +1,53 @@
 name: ECATUP
 version: '${version}'
-main: fr.efreicraft.ecatup.Main
+main: fr.efreicraft.ecatup.ECATUP
 prefix: ECATUP
 api-version: 1.19
 authors: [ Niilyx, DocSystem ]
 description: Les commandes et fonctions utiles d'Efrei Craft
 website: https://github.com/efrei-craft/ECATUP
 database: true
-libraries:
-  - org.mariadb.jdbc:mariadb-java-client:3.0.8
 
-depend: #Charger ECATUP APRÈS LP.
-  - LuckPerms
+depend: #Charger ECATUP APRÈS LP et ACP.
+  - AnimusClient-Paper
 
 permissions:
-  ecatup.lobby:
-    description: Ramène au lobby principal
-  ecatup.gamemode:
-    description: Permet de changer de gamemode
-  ecatup.give.skull:
-    description: Permet de donner une tête de joueur
-  ecatup.whois:
-    description: Permet d'utiliser /whois
-  ecatup.chat.color:
-    description: Permet l'utilisation de '&' pour colorer son texte
-  ecatup.slap:
-    description: Permet d'utiliser /slap
   ecatup.channel.use:
     description: Permet d'utiliser /channel
   ecatup.channel:
     description: Permet de changer de channel, tout court
     children:
       - ecatup.channel.global
+  ecatup.chat.color:
+    description: Permet l'utilisation de '&' pour colorer son texte
+  ecatup.gamemode:
+    description: Permet de changer de gamemode
+  ecatup.give.skull:
+    description: Permet de donner une tête de joueur
+  ecatup.lobby:
+    description: Ramène au lobby principal
+  ecatup.slap:
+    description: Permet d'utiliser /slap
+  ecatup.speed.fly:
+    description: Permet de configurer sa vitesse de vol
+  ecatup.speed.reset:
+    description: Permet de réinitialiser sa vitesse de vol et de marche
+  ecatup.speed.walk:
+    description: Permet de configurer sa vitesse de marche
+  ecatup.sudo:
+    description: Permet d'utiliser /sudo
+  ecatup.whois:
+    description: Permet d'utiliser /whois
+  ecatup.groupperms:
+    description: Utiliser les commandes de permissions de groupes
+  ecatup.playerperms:
+    description: Utiliser les commandes de permissions de groupes
 
 commands:
   lobby:
     description: Teleport to the lobby
     usage: /lobby
-    aliases: [hub, spawn]
+    aliases: [ hub, spawn ]
     permission: ecatup.lobby
   chat:
     description: Change chat channel
@@ -45,6 +55,13 @@ commands:
       - channel
       - c
     permission: ecatup.channel.use
+  flyspeed:
+    description: Sets your flight speed
+    usage: /fspeed [[reset|r] OR [-10 - 10]] [player]
+    aliases:
+      - fspeed
+      - fsp
+    permission: ecatup.speed.fly
   gm:
     description: Change your gamemode
     usage: /gm <gamemode> [player]
@@ -65,6 +82,14 @@ commands:
     description: Change your gamemode to spectator
     usage: /gmsp [player]
     permission: ecatup.gamemode
+  resetspeed:
+    description: Resets all speeds
+    usage: /resetspeed [player]
+    aliases:
+      - resetsp
+      - rspeed
+      - rsp
+    permission: ecatup.speed.reset
   skull:
     description: Get a player skull
     usage: /skull [player]
@@ -73,8 +98,30 @@ commands:
     description: Slaps the shit outta someone
     aliases:
       - bitchslap
-    permission: /slap <player> [-a]
+    usage: /slap <player> [-a]
+    permission: ecatup.slap
+  sudo:
+    description: Makes someone say something or execute a command
+    usage: /sudo <player> <something>
+    permission: ecatup.sudo
   whois:
-    description: Get info about a player
+    description: Gets info about a player
     usage: /whois [player]
     permission: ecatup.whois
+  walkspeed:
+    description: Sets walking speed
+    usage: /walkspeed [[reset] OR [-10 - 10]] [player]
+    aliases:
+      - wspeed
+      - wsp
+    permission: ecatup.speed.walk
+  groupperms:
+    description: All about group perms
+    aliases:
+      - gperms
+    permission: ecatup.groupperms
+  playerperms:
+    description: All about group perms
+    aliases:
+      - pperms
+    permission: ecatup.playerperms

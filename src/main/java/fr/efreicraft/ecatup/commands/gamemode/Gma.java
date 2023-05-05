@@ -1,4 +1,4 @@
-package fr.efreicraft.ecatup.commands;
+package fr.efreicraft.ecatup.commands.gamemode;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

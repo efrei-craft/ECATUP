@@ -1,0 +1,44 @@
+name: Build and publish artifacts
+
+on:
+  push:
+    branches:
+      - stable
+      - dev
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Set Repository Environment Variable
+        run: |
+          if [ "${{ steps.extract_branch.outputs.branch }}" == "stable" ]; then
+            echo "NEXUS_REPOSITORY=${{ secrets.NEXUS_STABLE_REPOSITORY }}" >> $GITHUB_ENV
+          else
+            echo "NEXUS_REPOSITORY=${{ secrets.NEXUS_DEV_REPOSITORY }}" >> $GITHUB_ENV
+          fi
+
+      - name: Publish package
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: publish
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          NEXUS_REPOSITORY: ${{ env.NEXUS_REPOSITORY }}

@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'fr.efreicraft'
-version = '1.0.12'
+version = '1.1.0'
 
 compileJava.options.encoding "UTF-8"
 
@@ -17,22 +18,42 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        url = 'https://ci.mg-dev.eu/plugin/repository/everything'
+        content {
+            includeGroup 'com.bergerkiller.bukkit'
+            includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
+            includeGroup 'com.bergerkiller.mountiplex'
+        }
+    }
+    if (System.getenv("NEXUS_REPOSITORY")) {
+        println "Using Nexus repository"
+        maven {
+            name = 'nexus'
+            url = uri(System.getenv("NEXUS_REPOSITORY"))
+            credentials {
+                username = System.getenv("NEXUS_USERNAME")
+                password = System.getenv("NEXUS_PASSWORD")
+            }
+        }
+    }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+
+    compileOnly "fr.efreicraft:AnimusClient:latest.integration"
 }
 
 jar {
-    manifest {
-        attributes "Main-Class": "fr.efreicraft.ecatup.Main"
-    }
-
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
 }
 
 def targetJavaVersion = 17
@@ -61,6 +82,41 @@ processResources {
 }
 
 task move(type: Copy) {
-    from "build/libs/" + rootProject.name + "-" + version + ".jar"
+    from "${buildDir}\\libs\\" + rootProject.name + ".jar"
     into "SERVER_TEST/plugins/"
+}
+
+configurations {
+    jar.archiveName = rootProject.name + ".jar"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = rootProject.group
+            artifactId = rootProject.name
+            version = rootProject.version
+
+            from components.java
+
+            pom.packaging = 'jar'
+
+            artifact("${buildDir}/libs/${rootProject.name}.jar") {
+                classifier = 'jar'
+            }
+        }
+    }
+    repositories {
+        if (System.getenv("NEXUS_REPOSITORY")) {
+            maven {
+                url = uri(System.getenv("NEXUS_REPOSITORY"))
+                credentials {
+                    username = System.getenv("NEXUS_USERNAME")
+                    password = System.getenv("NEXUS_PASSWORD")
+                }
+            }
+        } else {
+            mavenLocal()
+        }
+    }
 }

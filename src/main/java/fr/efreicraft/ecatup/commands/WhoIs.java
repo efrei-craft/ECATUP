@@ -1,6 +1,5 @@
 package fr.efreicraft.ecatup.commands;
 
-import fr.efreicraft.ecatup.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -8,7 +7,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -27,8 +25,6 @@ public class WhoIs implements CommandExecutor {
      * Rangs: [rang1, rang2...]
      * Serveur (si connecté): serveur
      **/
-
-    final LuckPerms LP = Main.LP;
 
     final TextColor KEY_COLOR = NamedTextColor.AQUA;
     final TextColor VALUE_COLOR = NamedTextColor.WHITE;
@@ -63,7 +59,8 @@ public class WhoIs implements CommandExecutor {
         Component message;
 
         /* Obtenir les rangs */
-        String highestRank = LP.getUserManager().loadUser(player.getUniqueId()).join().getCachedData().getMetaData().getPrefix();
+        //TODO finir ça
+        String highestRank = "hm";
 
         message = Component.join(JoinConfiguration.newlines(),
                         Component.join(JoinConfiguration.noSeparators(), Component.text("UUID: ", KEY_COLOR), Component.text(String.valueOf(player.getUniqueId()), VALUE_COLOR, TextDecoration.BOLD)
@@ -71,6 +68,9 @@ public class WhoIs implements CommandExecutor {
                                 .hoverEvent(CLICK_TO_COPY),
                         Component.join(JoinConfiguration.noSeparators(), Component.text("Rang: ", KEY_COLOR), Component.text(highestRank == null ? "rien" : colorize(highestRank), VALUE_COLOR, TextDecoration.BOLD)
                                 .clickEvent(ClickEvent.copyToClipboard(highestRank == null ? "rien" : colorize(highestRank))))
+                                .hoverEvent(CLICK_TO_COPY),
+                        Component.join(JoinConfiguration.noSeparators(), Component.text("Pos: ", KEY_COLOR), Component.text(player.isOnline() ? ((Player) player).getLocation().toString() : "couldn't get pos...", VALUE_COLOR, TextDecoration.BOLD)
+                                .clickEvent(ClickEvent.copyToClipboard(player.isOnline() ? ((Player) player).getLocation().toString() : "couldn't get pos...")))
                                 .hoverEvent(CLICK_TO_COPY)
                         );
 
