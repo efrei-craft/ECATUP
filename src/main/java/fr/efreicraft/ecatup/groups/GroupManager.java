@@ -22,6 +22,8 @@ public class GroupManager {
     }
 
     public void registerTeams() {
+        unregisterTeams();
+
         List<PermGroup> groups = getGroups();
 
         for(PermGroup group : groups) {
@@ -60,7 +62,9 @@ public class GroupManager {
                     .getMainScoreboard()
                     .getTeam(teamName);
 
-            team.unregister();
+            if (team != null) {
+                team.unregister();
+            }
         }
     }
 
