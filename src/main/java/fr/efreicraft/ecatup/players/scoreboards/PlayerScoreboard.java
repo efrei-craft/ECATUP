@@ -22,7 +22,7 @@ import java.util.*;
  * Cette classe ne permet pas une entière customisation du scoreboard pour ainsi standardiser les affichages à travers les jeux.
  *
  * @author Antoine B. {@literal <antoine@jiveoff.fr>}
- * @project EFREI-Minigames
+ * @project ECATUP
  */
 public class PlayerScoreboard {
 
@@ -109,6 +109,7 @@ public class PlayerScoreboard {
      * Met à jour le scoreboard pour le joueur.
      */
     private void updateScoreboard() {
+        if (this.title == null) return;
         if(this.board.isDeleted()) return;
         this.board.updateTitle(LegacyComponentSerializer.legacySection().serialize(this.title));
         this.board.updateLines(this.getLines());
