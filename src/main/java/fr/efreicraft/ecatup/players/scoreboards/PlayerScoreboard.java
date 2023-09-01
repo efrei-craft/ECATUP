@@ -81,8 +81,9 @@ public class PlayerScoreboard {
      */
     public PlayerScoreboard(ECPlayer player) {
         this.player = player;
-        this.setVisibility(true);
+        this.title = LegacyComponentSerializer.legacyAmpersand().deserialize("&e&lEFREI CRAFT");
         this.fields = new TreeMap<>();
+        this.setVisibility(true);
         updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
                 ECATUP.getInstance(),
                 this::updateScoreboard,
