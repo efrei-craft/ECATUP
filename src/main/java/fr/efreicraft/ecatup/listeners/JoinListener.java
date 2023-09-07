@@ -21,6 +21,7 @@ public class JoinListener implements Listener {
 
             ECATUP.getInstance().getPlayerManager().addPlayer(ecPlayer);
         } catch (ApiException | RuntimeException e) {
+            System.out.println("Erreur lors de la connexion d'un joueur : " + e.getMessage());
             event.getPlayer().kick();
         }
     }
