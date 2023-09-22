@@ -6,12 +6,13 @@ import fr.efreicraft.animus.models.Player;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.ECPlayer;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public static void onJoin(PlayerJoinEvent event) {
         event.joinMessage(null);
         try {
@@ -21,6 +22,7 @@ public class JoinListener implements Listener {
 
             ECATUP.getInstance().getPlayerManager().addPlayer(ecPlayer);
         } catch (ApiException | RuntimeException e) {
+            System.out.println("Erreur lors de la connexion d'un joueur : " + e.getMessage());
             event.getPlayer().kick();
         }
     }

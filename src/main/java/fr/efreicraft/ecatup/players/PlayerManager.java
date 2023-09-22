@@ -4,6 +4,7 @@ import fr.efreicraft.animus.models.PermGroup;
 import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.events.ECPlayerJoined;
+import fr.efreicraft.ecatup.players.events.ECPlayerLeft;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,9 @@ public class PlayerManager {
     public void removePlayer(ECPlayer player) {
         player.unload();
         this.players.remove(player);
+
+        ECPlayerLeft event = new ECPlayerLeft(player);
+        ECATUP.getInstance().getServer().getPluginManager().callEvent(event);
     }
 
     /**
