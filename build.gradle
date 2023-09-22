@@ -18,14 +18,7 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
-    maven {
-        url = 'https://ci.mg-dev.eu/plugin/repository/everything'
-        content {
-            includeGroup 'com.bergerkiller.bukkit'
-            includeGroup 'com.bergerkiller.bukkit.regionchangetracker'
-            includeGroup 'com.bergerkiller.mountiplex'
-        }
-    }
+    maven { url "https://repo.dmulloy2.net/repository/public/" }
     if (System.getenv("NEXUS_REPOSITORY")) {
         println "Using Nexus repository"
         maven {
@@ -41,7 +34,6 @@ repositories {
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
-    compileOnly 'net.luckperms:api:5.4'
 
     compileOnly "fr.efreicraft:AnimusClient:latest.integration"
 }

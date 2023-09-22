@@ -12,7 +12,7 @@ import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
 import fr.efreicraft.ecatup.groups.GroupManager;
 import fr.efreicraft.ecatup.listeners.ChatListener;
 import fr.efreicraft.ecatup.listeners.JoinListener;
-import fr.efreicraft.ecatup.listeners.QuitListener;
+import fr.efreicraft.ecatup.listeners.LeaveListener;
 import fr.efreicraft.ecatup.players.PlayerManager;
 import fr.efreicraft.ecatup.players.menus.MenuListener;
 import fr.efreicraft.ecatup.utils.DiscordWebhook;
@@ -64,7 +64,7 @@ public final class ECATUP extends JavaPlugin {
         // Register events
         Bukkit.getPluginManager().registerEvents(new ChatListener(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), INSTANCE);
-        Bukkit.getPluginManager().registerEvents(new QuitListener(), INSTANCE);
+        Bukkit.getPluginManager().registerEvents(new LeaveListener(), INSTANCE);
 
         registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
         for (PreferenceCache.ChatChannel channel : PreferenceCache.ChatChannel.values()) {

@@ -6,12 +6,13 @@ import fr.efreicraft.animus.models.Player;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.ECPlayer;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public static void onJoin(PlayerJoinEvent event) {
         event.joinMessage(null);
         try {
