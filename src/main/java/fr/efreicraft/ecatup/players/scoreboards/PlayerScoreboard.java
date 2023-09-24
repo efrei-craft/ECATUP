@@ -160,7 +160,7 @@ public class PlayerScoreboard {
                         + LegacyComponentSerializer.legacySection().serialize(field.value())
                 );
             } else {
-                fieldsToShow.add(LegacyComponentSerializer.legacySection().serialize(field.name().decoration(TextDecoration.BOLD, true)));
+                fieldsToShow.add(LegacyComponentSerializer.legacySection().serialize(field.name()));
                 fieldsToShow.add(LegacyComponentSerializer.legacySection().serialize(field.value()));
             }
             fieldsToShow.add("§r");
