@@ -1,7 +1,7 @@
 /*
  * This file is part of FastBoard, licensed under the MIT License.
  *
- * Copyright (c) 2019-2021 MrMicky
+ * Copyright (c) 2019-2023 MrMicky
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ public final class FastReflection {
     private static final MethodType VOID_METHOD_TYPE = MethodType.methodType(void.class);
     private static final boolean NMS_REPACKAGED = optionalClass(NM_PACKAGE + ".network.protocol.Packet").isPresent();
 
-    private static volatile Object theUnsafe; //NOSONAR
+    private static volatile Object theUnsafe;
 
     private FastReflection() {
         throw new UnsupportedOperationException();
@@ -58,7 +58,7 @@ public final class FastReflection {
         return NMS_REPACKAGED;
     }
 
-    public static String nmsClassName(String post1_17package, String className) { //NOSONAR
+    public static String nmsClassName(String post1_17package, String className) {
         if (NMS_REPACKAGED) {
             String classPackage = post1_17package == null ? NM_PACKAGE : NM_PACKAGE + '.' + post1_17package;
             return classPackage + '.' + className;
@@ -66,11 +66,11 @@ public final class FastReflection {
         return NMS_PACKAGE + '.' + VERSION + '.' + className;
     }
 
-    public static Class<?> nmsClass(String post1_17package, String className) throws ClassNotFoundException { //NOSONAR
+    public static Class<?> nmsClass(String post1_17package, String className) throws ClassNotFoundException {
         return Class.forName(nmsClassName(post1_17package, className));
     }
 
-    public static Optional<Class<?>> nmsOptionalClass(String post1_17package, String className) { //NOSONAR
+    public static Optional<Class<?>> nmsOptionalClass(String post1_17package, String className) {
         return optionalClass(nmsClassName(post1_17package, className));
     }
 
@@ -119,7 +119,7 @@ public final class FastReflection {
         throw new ClassNotFoundException("No class in " + parentClass.getCanonicalName() + " matches the predicate.");
     }
 
-    public static PacketConstructor findPacketConstructor(Class<?> packetClass, MethodHandles.Lookup lookup) throws Exception { //NOSONAR
+    public static PacketConstructor findPacketConstructor(Class<?> packetClass, MethodHandles.Lookup lookup) throws Exception {
         try {
             MethodHandle constructor = lookup.findConstructor(packetClass, VOID_METHOD_TYPE);
             return constructor::invoke;
@@ -132,7 +132,7 @@ public final class FastReflection {
                 if (theUnsafe == null) {
                     Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
                     Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
-                    theUnsafeField.setAccessible(true); //NOSONAR
+                    theUnsafeField.setAccessible(true);
                     theUnsafe = theUnsafeField.get(null);
                 }
             }
@@ -145,6 +145,6 @@ public final class FastReflection {
 
     @FunctionalInterface
     interface PacketConstructor {
-        Object invoke() throws Throwable; //NOSONAR
+        Object invoke() throws Throwable;
     }
 }
