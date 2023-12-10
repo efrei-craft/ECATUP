@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
 group = 'fr.efreicraft'
@@ -110,5 +111,12 @@ publishing {
         } else {
             mavenLocal()
         }
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "efrei-craft_ECATUP_AYxT1h2h0r1VQ1KDYPJ7"
+        property "sonar.projectName", "ECATUP"
     }
 }
