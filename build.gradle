@@ -46,7 +46,7 @@ jar {
 }
 
 configurations {
-    jar.archiveName = rootProject.name + ".jar"
+    jar.archiveBaseName  = rootProject.name + ".jar"
 }
 
 def targetJavaVersion = 17
