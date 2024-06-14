@@ -80,7 +80,7 @@ task move(type: Copy) {
 }
 
 configurations {
-    jar.archiveName = rootProject.name + ".jar"
+    jar.archiveBaseName = rootProject.name + ".jar"
 }
 
 publishing {
