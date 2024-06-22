@@ -87,6 +87,8 @@ public final class ECATUP extends JavaPlugin {
         registerCommand("groupperms", new GroupsCom());
         registerCommand("playerperms", new PlayersCom());
 
+        registerCommand("hasperm", new HasPerm());
+
         // Send log to Discord
         DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
         webhook.addEmbed(new DiscordWebhook.EmbedObject()

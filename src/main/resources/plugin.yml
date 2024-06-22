@@ -115,6 +115,7 @@ commands:
       - wspeed
       - wsp
     permission: ecatup.speed.walk
+
   groupperms:
     description: All about group perms
     aliases:
@@ -125,3 +126,7 @@ commands:
     aliases:
       - pperms
     permission: ecatup.playerperms
+
+  hasperm:
+    description: (Debug) Check if player has specified permission
+    permission: ecatup.hasperm
