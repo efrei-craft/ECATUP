@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,12 +41,13 @@ public class HasPerm implements CommandExecutor, TabExecutor {
         if (!player.isOnline()) fromDB = true;
 
         permission = permission.toLowerCase();
+        if (permission.endsWith(".*")) permission = permission.substring(0, permission.indexOf(".*"));
 
         if (fromDB) {
             try {
                 List<Permission> perms = PlayerService.getPermissionOfPlayer(player.getUniqueId().toString());
                 for (Permission p : perms) {
-                    if (p.getName().equalsIgnoreCase(permission)) {
+                    if (p.getName().startsWith(permission)) {
                         MessageUtils.sendMessage(sender, MessageUtils.ChatPrefix.SERVER,
                                 "%s possède la permission &a[%s]&r dans [%s].".formatted(player.getName(), permission, String.join(",", p.getServerTypes())));
                         return true;
@@ -71,7 +73,7 @@ public class HasPerm implements CommandExecutor, TabExecutor {
 
 
             for (Permission p : ecPlayer.getAnimusPlayer().getPerms()) {
-                if (p.getName().equalsIgnoreCase(permission)) {
+                if (p.getName().startsWith(permission)) {
                     MessageUtils.sendMessage(sender, MessageUtils.ChatPrefix.SERVER,
                             "%s possède la permission &a[%s]&r dans [%s].".formatted(player.getName(), permission, String.join(",", p.getServerTypes())));
                     return true;
@@ -87,7 +89,7 @@ public class HasPerm implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length == 1) return Bukkit.getOnlinePlayers().stream().map(String::valueOf).sorted().toList();
+        if (args.length == 1) return Bukkit.getOnlinePlayers().stream().map(Player::getName).sorted().toList();
         if (args.length == 3) return List.of("true", "false");
         return null;
     }

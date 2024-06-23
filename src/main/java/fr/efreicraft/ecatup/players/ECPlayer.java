@@ -241,6 +241,9 @@ public class ECPlayer {
             for (String permission : permissions) {
                 if(permission.endsWith(".*")) {
                     List<String> wildcardPermissions = getWildcardPermissions(permission);
+
+                    // certains plugins n'enregistrent pas leurs permissions (*ahem* Multiverse-Core)
+                    attachment.setPermission(permission, true);
                     for (String wildcardPermission : wildcardPermissions) {
                         attachment.setPermission(wildcardPermission, true);
                     }
