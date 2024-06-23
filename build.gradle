@@ -43,10 +43,8 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-}
 
-configurations {
-    jar.archiveBaseName  = rootProject.name + ".jar"
+    archiveFileName = rootProject.name + ".jar"
 }
 
 def targetJavaVersion = 17
@@ -77,10 +75,6 @@ processResources {
 task move(type: Copy) {
     from "${buildDir}\\libs\\" + rootProject.name + ".jar"
     into "SERVER_TEST/plugins/"
-}
-
-configurations {
-    jar.archiveBaseName = rootProject.name + ".jar"
 }
 
 publishing {
