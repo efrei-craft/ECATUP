@@ -6,6 +6,7 @@ import fr.efreicraft.animus.models.PermGroupPlayer;
 import fr.efreicraft.ecatup.ECATUP;
 import fr.efreicraft.ecatup.players.menus.PlayerMenus;
 import fr.efreicraft.ecatup.players.scoreboards.PlayerScoreboard;
+import fr.efreicraft.ecatup.players.statistics.PlayerStatisticsManager;
 import fr.efreicraft.ecatup.utils.MessageUtils;
 import fr.efreicraft.ecatup.utils.SoundUtils;
 import fr.efreicraft.ecatup.utils.TitleUtils;
@@ -49,6 +50,11 @@ public class ECPlayer {
     private final PlayerMenus playerMenus;
 
     /**
+     * Instance du gestionnaire de statistiques du joueur.
+     */
+    private final PlayerStatisticsManager statisticsManager;
+
+    /**
      * Instance de gestionnaire de permissions du joueur.
      */
     private PermissionAttachment attachment;
@@ -59,10 +65,12 @@ public class ECPlayer {
      */
     public ECPlayer(org.bukkit.entity.Player playerEntity, fr.efreicraft.animus.models.Player animusPlayer) throws ApiException {
         this.playerEntity = playerEntity;
-        this.playerMenus = new PlayerMenus();
-        this.attachment = playerEntity.addAttachment(ECATUP.getInstance());
-        this.scoreboard = new PlayerScoreboard(this);
         this.animusPlayer = animusPlayer;
+        this.attachment = playerEntity.addAttachment(ECATUP.getInstance());
+
+        this.statisticsManager = new PlayerStatisticsManager(this);
+        this.playerMenus = new PlayerMenus();
+        this.scoreboard = new PlayerScoreboard(this);
         this.setPrefix(this.animusPlayer.getPermGroups().get(0).getPrefix());
 
         ECATUP.getInstance().getGroupManager().addPlayerToTeam(this);
@@ -75,6 +83,7 @@ public class ECPlayer {
      */
     public void unload() {
         this.scoreboard.unload();
+        this.statisticsManager.unload();
     }
 
     /**
@@ -280,5 +289,9 @@ public class ECPlayer {
                 .filter(Map.Entry::getValue) // Ne garder que les perms qui sont true
                 .map(Map.Entry::getKey) // Ne prendre que les clés
                 .toList();
+    }
+
+    public PlayerStatisticsManager getStatisticsManager() {
+        return statisticsManager;
     }
 }
