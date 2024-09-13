@@ -58,6 +58,11 @@ public class MessageUtils {
         TEAM("&dÉquipe"),
 
         /**
+         * Préfixe pour les messages concernant les statistiques.
+         */
+        STATS("&eStatistiques"),
+
+        /**
          * Préfixe vide.
          */
         EMPTY("");
