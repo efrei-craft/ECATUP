@@ -13,6 +13,7 @@ import fr.efreicraft.ecatup.utils.TitleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -293,5 +294,9 @@ public class ECPlayer {
 
     public PlayerStatisticsManager getStatisticsManager() {
         return statisticsManager;
+    }
+
+    public static ECPlayer get(Player player) {
+        return ECATUP.getInstance().getPlayerManager().getPlayer(player);
     }
 }

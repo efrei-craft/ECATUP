@@ -1,6 +1,8 @@
 package fr.efreicraft.ecatup.utils;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -56,6 +58,11 @@ public class MessageUtils {
          * Préfixe pour les messages concernant les équipes (assignations aux équipes etc).
          */
         TEAM("&dÉquipe"),
+
+        /**
+         * Préfixe pour les commandes.
+         */
+        COMMAND("&9Commande"),
 
         /**
          * Préfixe pour les messages concernant les statistiques.
@@ -136,6 +143,32 @@ public class MessageUtils {
      */
     public static void sendMessage(CommandSender player, String message) {
         sendMessage(new CommandSender[]{player}, ChatPrefix.EMPTY, message);
+    }
+
+    /**
+     * Envoyer un message à un joueur sans préfixe et avec les composants Kyori.
+     *
+     * @param player  Joueur.
+     * @param message Composant Kyori (MiniMessage conseillé).
+     */
+    public static void sendMessage(CommandSender player, Component message) {
+        player.sendMessage(message);
+    }
+
+    /**
+     * Envoyer un message à un joueur avec préfixe et avec les composants Kyori.
+     *
+     * @param player  Joueur.
+     * @param prefix  Préfixe du message.
+     * @param message Composant Kyori (MiniMessage conseillé).
+     */
+    public static void sendMessage(CommandSender player, ChatPrefix prefix, Component message) {
+        sendMessage(
+                player,
+                Component.text().append(
+                        LegacyComponentSerializer.legacyAmpersand().deserialize(prefix.toString())
+                ).append(message).build()
+        );
     }
 
     /**

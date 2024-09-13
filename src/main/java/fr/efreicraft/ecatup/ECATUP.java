@@ -1,39 +1,34 @@
 package fr.efreicraft.ecatup;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import dev.rollczi.litecommands.LiteCommands;
+import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.schematic.SchematicFormat;
+import fr.efreicraft.animus.invoker.ApiException;
 import fr.efreicraft.ecatup.commands.*;
-import fr.efreicraft.ecatup.commands.gamemode.*;
-import fr.efreicraft.ecatup.commands.permissions.GroupsCom;
-import fr.efreicraft.ecatup.commands.permissions.PlayersCom;
-import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
-import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;
-import fr.efreicraft.ecatup.commands.speeds.WalkSpeed;
+import fr.efreicraft.ecatup.commands.arguments.GameModeArgument;
+import fr.efreicraft.ecatup.commands.exceptions.CommandException;
+import fr.efreicraft.ecatup.commands.handlers.InvalidUsage;
+import fr.efreicraft.ecatup.commands.handlers.PermissionHandler;
+import fr.efreicraft.ecatup.commands.validator.NotTheSamePlayer;
+import fr.efreicraft.ecatup.commands.validator.NotTheSamePlayerValidator;
+import fr.efreicraft.ecatup.commands.validator.Speed;
+import fr.efreicraft.ecatup.commands.validator.SpeedValidator;
 import fr.efreicraft.ecatup.groups.GroupManager;
 import fr.efreicraft.ecatup.listeners.ChatListener;
 import fr.efreicraft.ecatup.listeners.JoinListener;
 import fr.efreicraft.ecatup.listeners.LeaveListener;
 import fr.efreicraft.ecatup.players.PlayerManager;
 import fr.efreicraft.ecatup.players.menus.MenuListener;
-import fr.efreicraft.ecatup.utils.DiscordWebhook;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import fr.efreicraft.ecatup.utils.MessageUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
+import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nullable;
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class ECATUP extends JavaPlugin {
@@ -46,6 +41,8 @@ public final class ECATUP extends JavaPlugin {
 
     private GroupManager groupManager;
 
+    private LiteCommands<CommandSender> liteCommands;
+
     @Override
     public void onEnable() {
 
@@ -57,52 +54,63 @@ public final class ECATUP extends JavaPlugin {
         config.options().copyDefaults(true); // au cas où le fichier existe, mais est incomplet.
         INSTANCE.saveConfig();
 
-        // Register BungeeCord channel
-        getServer().getMessenger().registerOutgoingPluginChannel(INSTANCE, "BungeeCord");
-        getServer().getMessenger().registerIncomingPluginChannel(INSTANCE, "BungeeCord", new ChatListener());
-
         // Register events
         Bukkit.getPluginManager().registerEvents(new ChatListener(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new JoinListener(), INSTANCE);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), INSTANCE);
 
-        registerCommand("chat", new fr.efreicraft.ecatup.commands.Chat());
-        for (PreferenceCache.ChatChannel channel : PreferenceCache.ChatChannel.values()) {
-            Bukkit.getPluginManager().addPermission(new Permission("ecatup.channel." + channel.toString().toLowerCase()));
-        }
+        this.liteCommands = LiteBukkitFactory.builder()
+                .settings(settings -> settings
+                        .fallbackPrefix("ECATUP")
+                        .nativePermissions(false)
+                )
 
-        registerCommand("flyspeed", new FlySpeed());
-        registerCommand("gm", new Gm());
-        registerCommand("gms", new Gms());
-        registerCommand("gma", new Gma());
-        registerCommand("gmc", new Gmc());
-        registerCommand("gmsp", new Gmsp());
-        registerCommand("resetspeed", new ResetSpeed());
-        registerCommand("skull", new Skull());
-        registerCommand("slap", new Slap());
-        registerCommand("sudo", new Sudo());
-        registerCommand("walkspeed", new WalkSpeed());
-        registerCommand("whois", new WhoIs());
+                .argument(GameMode.class, new GameModeArgument())
 
-        registerCommand("groupperms", new GroupsCom());
-        registerCommand("playerperms", new PlayersCom());
+                .annotations(configuration -> configuration
+                        .validator(Player.class, NotTheSamePlayer.class, new NotTheSamePlayerValidator())
+                        .validator(Float.class, Speed.class, new SpeedValidator())
+                )
 
-        registerCommand("hasperm", new HasPerm());
+                .commands(
+                        new GameModeCommand(),
+                        new SpeedCommand(),
+                        new FlyCommand(),
+                        new HasPermCommand(),
+                        new SkullCommand(),
+                        new SlapCommand(),
+                        new RideCommand(),
+                        new SudoCommand()
+                )
 
-        // Send log to Discord
-        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
-            .setTitle("Serveur")
-            .setDescription("Le serveur a démarré !")
-            .setColor(Color.white)
-            .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-        );
-        try {
-            webhook.execute();
-        } catch (IOException ignored) {}
+                .exception(ApiException.class, (invocation, exception, chain) -> {
+                    if (invocation.sender() instanceof Player) {
+                        MessageUtils.sendMessage(
+                                invocation.sender(),
+                                MessageUtils.ChatPrefix.PLUGIN,
+                                "&cErreur API: &7%s".formatted(exception.getMessage())
+                        );
+                    }
+                })
+
+                .exception(CommandException.class, (invocation, exception, chain) -> {
+                    if (invocation.sender() instanceof Player) {
+                        MessageUtils.sendMessage(
+                                invocation.sender(),
+                                MessageUtils.ChatPrefix.COMMAND,
+                                "&cErreur: &7%s".formatted(exception.getMessage())
+                        );
+                    }
+                })
+
+                .missingPermission(new PermissionHandler())
+                .invalidUsage(new InvalidUsage())
+
+                .schematicGenerator(SchematicFormat.angleBrackets())
+
+                .build();
 
         playerManager = new PlayerManager();
-
         groupManager = new GroupManager();
 
         Bukkit.getPluginManager().registerEvents(new MenuListener(), INSTANCE);
@@ -111,82 +119,6 @@ public final class ECATUP extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-
-        // Unregister BungeeCord channel
-        getServer().getMessenger().unregisterOutgoingPluginChannel(INSTANCE);
-        getServer().getMessenger().unregisterIncomingPluginChannel(INSTANCE);
-
-        if (!config.getString("server_name", "").equalsIgnoreCase("lobby"))
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                sendPlayerToServer(player, "lobby");
-            }
-
-        try {
-            // Send log to Discord
-            DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook"));
-            webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setTitle("Serveur")
-                    .setDescription("Le serveur s'est arrêté !")
-                    .setColor(java.awt.Color.decode("#ffffff"))
-                    .setFooter("Efrei Craft", "https://efreicraft.fr/img/favicon.png")
-            );
-//            webhook.execute();
-        } catch (Throwable ignored) {}
-    }
-
-    void registerCommand(String command, CommandExecutor executor) {
-        Objects.requireNonNull(Bukkit.getPluginCommand(command)).setExecutor(executor);
-    }
-
-    public static List<String> getPlayersForTabList(String[] args, int argPos) {
-        List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().toLowerCase().startsWith(args[argPos].toLowerCase())).collect(Collectors.toList());
-        List<String> results = new ArrayList<>();
-        players.forEach(player -> results.add(player.getName()));
-        return results.isEmpty() ? null : results;
-    }
-
-    public static void sendPlayerToServer(Player player, String server) {
-        if (!player.hasPermission("server." + server.toLowerCase())) {
-            Component nope = Component.text("Vous ne pouvez pas aller sur ce serveur !").color(NamedTextColor.RED);
-            player.sendMessage(nope);
-            INSTANCE.getLogger().info(player.getName() + " tried to join " + server + " but doesn't have permission to do so.");
-            return;
-        }
-
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Connect");
-        out.writeUTF(server);
-        player.sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
-    }
-
-    public static void sendGlobalChat(String msg, @Nullable Player player) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-
-        out.writeUTF("Forward");
-        out.writeUTF("ONLINE");
-        out.writeUTF("ecatup:globalchat");
-
-        ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
-        DataOutputStream msgout = new DataOutputStream(msgbytes);
-
-        try {
-            msgout.writeUTF(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            INSTANCE.getLogger().severe("Couldn't send " +
-                    (player == null ? "a player's" : (player.getName() + "'s")) +
-                    " global message: " + msg);
-            if (player != null) {
-                Component failed = Component.text("Votre dernier message n'a pas été envoyé aux autres serveurs.").color(NamedTextColor.DARK_RED);
-                player.sendMessage(failed);
-            }
-        }
-
-        out.writeShort(msgbytes.toByteArray().length);
-        out.write(msgbytes.toByteArray());
-
-        Bukkit.getServer().sendPluginMessage(INSTANCE, "BungeeCord", out.toByteArray());
     }
 
     public static ECATUP getInstance() {
