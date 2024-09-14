@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 import fr.efreicraft.ecatup.commands.*;
 import fr.efreicraft.ecatup.commands.gamemode.*;
 import fr.efreicraft.ecatup.commands.permissions.GroupsCom;
+import fr.efreicraft.ecatup.commands.permissions.HasPerm;
 import fr.efreicraft.ecatup.commands.permissions.PlayersCom;
 import fr.efreicraft.ecatup.commands.speeds.FlySpeed;
 import fr.efreicraft.ecatup.commands.speeds.ResetSpeed;

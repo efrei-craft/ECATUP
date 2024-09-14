@@ -1,4 +1,4 @@
-package fr.efreicraft.ecatup.commands;
+package fr.efreicraft.ecatup.commands.permissions;
 
 import fr.efreicraft.animus.endpoints.PlayerService;
 import fr.efreicraft.animus.invoker.ApiException;
@@ -41,7 +41,6 @@ public class HasPerm implements CommandExecutor, TabExecutor {
         if (!player.isOnline()) fromDB = true;
 
         permission = permission.toLowerCase();
-        if (permission.endsWith(".*")) permission = permission.substring(0, permission.indexOf(".*"));
 
         if (fromDB) {
             try {
